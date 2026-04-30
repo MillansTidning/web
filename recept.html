@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recept</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h1>🍪 Recept</h1>
+  <p>När du varit här har du din fika eller mat serverad</p>
+</header>
+
+<nav>
+  <div class="overlay"></div>
+  <div class="menu-toggle">☰</div>
+
+  <div class="menu">
+    <a href="home.html">Start</a>
+    <a href="nyheter.html">Nyheter</a>
+    <a href="livefakta.html">Livefakta om Millan</a>
+    <a href="recept.html">Recept</a>
+    <a href="knep.html">Knep & knåp</a>
+    <a href="etidning.html">E-tidning</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="article">
+    <h2>Pasta del Tomaso</h2>
+    <img src="pastadeltomaso.jpeg" alt="God pastarätt">
+  </div>
+
+ </div>
+
+<footer>
+  <p>© Millans Tidning 2026</p>
+</footer>
+
+<script>
+  const toggle = document.querySelector(".menu-toggle");
+  const menu = document.querySelector(".menu");
+  const overlay = document.querySelector(".overlay");
+
+  toggle.addEventListener("click", () => {
+    menu.classList.toggle("active");
+    overlay.classList.toggle("active");
+  });
+
+  overlay.addEventListener("click", () => {
+    menu.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+</script>
+
+</body>
+</html>

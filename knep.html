@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knep & knåp</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h1>🧩 Knep & knåp</h1>
+  <p>Här får ni tänka till lite</p>
+</header>
+
+<nav>
+  <div class="overlay"></div>
+  <div class="menu-toggle">☰</div>
+
+  <div class="menu">
+    <a href="home.html">Start</a>
+    <a href="nyheter.html">Nyheter</a>
+    <a href="livefakta.html">Livefakta om Millan</a>
+    <a href="recept.html">Recept</a>
+    <a href="knep.html">Knep & knåp</a>
+    <a href="etidning.html">E-tidning</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="article">
+    <h2>Ordgömma</h2>
+    <img src="ordgömma.jpeg" alt="Ordgömma">
+  </div>
+
+  <div class="article">
+    <h2>Korsord</h2>
+    <img src="korsord.jpeg" alt="Korsord">
+  </div>
+
+  <div class="article">
+    <h2>Gåtor</h2>
+    <p>Skriv en gåta</p>
+    </div>
+
+</div>
+
+<footer>
+  <p>© Millans Tidning 2026</p>
+</footer>
+
+<script>
+  const toggle = document.querySelector(".menu-toggle");
+  const menu = document.querySelector(".menu");
+  const overlay = document.querySelector(".overlay");
+
+  toggle.addEventListener("click", () => {
+    menu.classList.toggle("active");
+    overlay.classList.toggle("active");
+  });
+
+  overlay.addEventListener("click", () => {
+    menu.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+</script>
+
+</body>
+</html>
