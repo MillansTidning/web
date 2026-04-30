@@ -16,12 +16,16 @@
 </header>
 
 <nav>
-  <a href="index.html">Start</a>
-  <a href="nyheter.html">Nyheter</a>
-  <a href="livefakta.html">Livefakta om Millan</a>
-  <a href="recept.html">Recept</a>
-  <a href="knep.html">Knep & knåp</a>
-  <a href="etidning.html">E-tidning</a>
+  <div class="menu-toggle">☰</div>
+
+  <div class="menu">
+    <a href="home.html">Start</a>
+    <a href="nyheter.html">Nyheter</a>
+    <a href="livefakta.html">Livefakta om Millan</a>
+    <a href="recept.html">Recept</a>
+    <a href="knep.html">Knep & knåp</a>
+    <a href="etidning.html">E-tidning</a>
+  </div>
 </nav>
 
 <div class="container">
@@ -61,6 +65,15 @@
 <footer>
   <p>© Millans Tidning 2026</p>
 </footer>
+
+<script>
+  const toggle = document.querySelector(".menu-toggle");
+  const menu = document.querySelector(".menu");
+
+  toggle.addEventListener("click", () => {
+    menu.classList.toggle("active");
+  });
+</script>
 
 </body>
 </html>
