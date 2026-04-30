@@ -1,0 +1,102 @@
+/* Grund */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f2f2f2;
+  color: #222;
+}
+
+/* Header */
+header {
+  background: linear-gradient(135deg, #ffcc00, #ffdd55);
+  padding: 25px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+}
+
+/* Navigation */
+nav {
+  background: #333;
+  padding: 12px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+}
+
+nav a {
+  color: white;
+  margin: 0 12px;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+  padding: 5px;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* Layout */
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Artiklar */
+.article {
+  background: white;
+  padding: 18px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.article h2 {
+  margin-top: 0;
+}
+
+/* Bilder */
+.article img {
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+/* Footer */
+footer {
+  background: #333;
+  color: white;
+  text-align: center;
+  padding: 15px;
+  margin-top: 20px;
+}
+
+/* PDF-knapp */
+.pdf-button.cat {
+  background: #ffbb33;
+  display: inline-block;
+  color: #333;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: 0.2s ease;
+}
+.pdf-button.cat:hover {
+  background: #ffcc55;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.20);
+}
+/* Mobilanpassning */
+@media (max-width: 600px) {
+  nav a {
+    display: block;
+    margin: 8px 0;
+  }
+}
