@@ -93,10 +93,30 @@ footer {
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0,0,0,0.20);
 }
-/* Mobilanpassning */
+.menu-toggle {
+  display: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+/* Mobil */
 @media (max-width: 600px) {
-  nav a {
+  .menu-toggle {
     display: block;
-    margin: 8px 0;
+  }
+
+  .menu {
+    display: none;
+    flex-direction: column;
+  }
+
+  .menu a {
+    display: block;
+    margin: 10px 0;
+  }
+
+  .menu.active {
+    display: flex;
   }
 }
