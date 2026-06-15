@@ -122,6 +122,15 @@ footer {
   margin-right: 10px;
 }
 
+video {
+  width: 100%;
+  max-width: 900px;
+  border-radius: 12px;
+  display: block;
+  margin: 20px auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
 /* Mobil */
 @media (max-width: 600px) {
   nav {
