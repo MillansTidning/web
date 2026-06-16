@@ -125,9 +125,6 @@ footer {
 video {
   width: 100%;
   max-width: 900px;
-  height: auto;
-  max-height: 500px;
-  object-fit: contain;
   border-radius: 12px;
   display: block;
   margin: 20px auto;
