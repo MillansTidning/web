@@ -264,3 +264,65 @@ video {
   margin-top: 14px;
   border-radius: 10px;
 }
+
+/* Mobilmeny */
+.overlay {
+  display: none;
+}
+
+/* Mobil */
+@media (max-width: 600px) {
+  nav {
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 2000;
+  }
+
+  .menu-toggle {
+    display: block;
+    margin-left: 10px;
+    z-index: 3000;
+  }
+
+  .menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 220px;
+    background: #333;
+    display: flex;
+    flex-direction: column;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    border-radius: 0 0 10px 0;
+    z-index: 3000;
+    box-shadow: 2px 4px 10px rgba(0,0,0,0.3);
+  }
+
+  .menu a {
+    padding: 15px;
+    border-bottom: 1px solid #444;
+    text-align: left;
+  }
+
+  .menu.active {
+    max-height: 500px;
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 1000;
+  }
+
+  .overlay.active {
+    display: block;
+  }
+}
