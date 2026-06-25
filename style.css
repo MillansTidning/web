@@ -131,60 +131,136 @@ video {
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-/* Mobil */
-@media (max-width: 600px) {
-  nav {
-    display: flex;
-    align-items: center;
-  }
-
-  .menu-toggle {
-    display: block;
-    margin-left: 10px;
-  }
-
-  .menu {
-    box-shadow: 2px 4px 10px rgba(0,0,0,0.3);
-  }
-  .menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 220px;
-    background: #333;
-
-    display: flex;
-    flex-direction: column;
-
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-
-    border-radius: 0 0 10px 0; /* snygg kant */
-    z-index: 1000;
-  }
-
-  .menu a {
-    padding: 15px;
-    border-bottom: 1px solid #444;
-    text-align: left;
-  }
-
-  .menu.active {
-    max-height: 500px;
-  }
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: none;
-  z-index: 900;
+/* --- GÄSTBOK --- */
+.skriv-inlagg-box {
+  background: white;
+  padding: 20px;
+  margin-bottom: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
-/* När aktiv */
-.overlay.active {
+.skriv-inlagg-box h2 {
+  margin-top: 0;
+}
+
+.form-grupp {
+  margin-bottom: 15px;
+}
+
+.form-grupp label {
   display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
+
+.form-grupp input[type="text"],
+.form-grupp textarea {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+}
+
+.gastbok-knapp {
+  background: #ffbb33;
+  color: #333;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: 0.2s ease;
+}
+
+.gastbok-knapp:hover {
+  background: #ffcc55;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.20);
+}
+
+.inlagg-kort {
+  background: white;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  border-left: 5px solid #ffbb33; /* Markering med Millans signaturfärg */
+}
+
+.inlagg-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.inlagg-namn {
+  font-weight: bold;
+  color: #333;
+}
+
+.inlagg-datum {
+  color: #777;
+}
+
+.inlagg-text {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.laddar-text {
+  text-align: center;
+  color: #777;
+  font-style: italic;
+}
+
+.skriv-inlagg-box,
+.inlagg-sektion {
+  background: white;
+  padding: 18px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.form-grupp {
+  margin-bottom: 15px;
+}
+
+.form-grupp label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.form-grupp input,
+.form-grupp textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.gastbok-knapp {
+  background: #ffcc00;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.gastbok-inlagg {
+  background: #f7f7f7;
+  padding: 14px;
+  margin-top: 14px;
+  border-radius: 10px;
 }

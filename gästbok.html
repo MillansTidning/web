@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gästbok - Millans Tidning</title>
+
+<link rel="icon" type="image/png" href="logga.png">
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header>
+  <h1>🧐 Gästbok</h1>
+  <p>Skriv en hälsning i Millans tidning!</p>
+</header>
+
+<nav>
+  <div class="overlay"></div>
+  <div class="menu-toggle">☰</div>
+
+  <div class="menu">
+    <a href="home.html">Start</a>
+    <a href="nyheter.html">Nyheter</a>
+    <a href="livefakta.html">Livefakta om Millan</a>
+    <a href="recept.html">Recept</a>
+    <a href="knep.html">Knep & knåp</a>
+    <a href="etidning.html">E-tidning</a>
+    <a href="övrigt.html">Övrigt</a>
+    <a href="gästbok.html">Gästbok</a>
+  </div>
+</nav>
+
+<main class="container">
+  <!-- Sektion för att skriva ett nytt inlägg -->
+  <section class="skriv-inlagg-box">
+    <h2>Skriv i gästboken</h2>
+    <form id="gastbok-form">
+      <div class="form-grupp">
+        <label for="namn">Ditt namn:</label>
+        <input type="text" id="namn" required placeholder="Skriv ditt namn här...">
+      </div>
+      <div class="form-grupp">
+        <label for="meddelande">Hälsning:</label>
+        <textarea id="meddelande" required rows="4" placeholder="Skriv din hälsning..."></textarea>
+      </div>
+      <button type="submit" class="gastbok-knapp">Skicka hälsning</button>
+    </form>
+  </section>
+
+  <!-- Sektion där alla inlägg visas -->
+  <section class="inlagg-sektion">
+    <h2>Tidigare hälsningar</h2>
+    <div id="inlagg-lista">
+      <p class="laddar-text">Laddar hälsningar...</p>
+    </div>
+  </section>
+</main>
+
+<!-- JS för mobilmenyn -->
+<script>
+  const menuToggle = document.querySelector('.menu-toggle');
+  const menu = document.querySelector('.menu');
+  const overlay = document.querySelector('.overlay');
+
+  menuToggle.addEventListener('click', () => {
+    menu.classList.toggle('active');
+    overlay.classList.toggle('active');
+  });
+
+  overlay.addEventListener('click', () => {
+    menu.classList.remove('active');
+    overlay.classList.remove('active');
+  });
+</script>
+
+<!-- Firebase Script -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCztFT4yGoEvDrPmxS4WwZjRqwtcRy_K_A",
+    authDomain: "millans-tidning.firebaseapp.com",
+    projectId: "millans-tidning",
+    storageBucket: "millans-tidning.firebasestorage.app",
+    messagingSenderId: "661191163803",
+    appId: "1:661191163803:web:cc1406ed3ebea95552eb3e",
+    measurementId: "G-ZT86YGNW6C"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const form = document.getElementById("gastbok-form");
+  const namnInput = document.getElementById("namn");
+  const meddelandeInput = document.getElementById("meddelande");
+  const inlaggLista = document.getElementById("inlagg-lista");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const namn = namnInput.value.trim();
+  const meddelande = meddelandeInput.value.trim();
+
+  if (!namn || !meddelande) {
+    alert("Fyll i namn och meddelande.");
+    return;
+  }
+
+  const text = meddelande.toLowerCase();
+
+  if (
+    text.includes("http") ||
+    text.includes("www.") ||
+    text.includes(".com")
+  ) {
+    alert("Länkar är inte tillåtna.");
+    return;
+  }
+
+  const senasteInlagg = localStorage.getItem("senasteInlagg");
+  const nu = Date.now();
+
+  if (senasteInlagg && nu - senasteInlagg < 30000) {
+    alert("Vänta lite innan du skriver igen.");
+    return;
+  }
+
+  localStorage.setItem("senasteInlagg", nu);
+
+  await addDoc(collection(db, "gastbok"), {
+    namn: namn,
+    meddelande: meddelande,
+    skapad: serverTimestamp()
+  });
+
+  form.reset();
+});
+
+  const q = query(collection(db, "gastbok"), orderBy("skapad", "desc"));
+
+  onSnapshot(q, (snapshot) => {
+    inlaggLista.innerHTML = "";
+
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+
+      const div = document.createElement("div");
+      div.className = "gastbok-inlagg";
+      div.innerHTML = `
+        <strong>${data.namn}</strong>
+        <p>${data.meddelande}</p>
+      `;
+
+      inlaggLista.appendChild(div);
+    });
+  });
+</script>
