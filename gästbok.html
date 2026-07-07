@@ -64,16 +64,18 @@
 <script>
   const menuToggle = document.querySelector('.menu-toggle');
   const menu = document.querySelector('.menu');
-  const overlay = document.querySelector('.overlay');
 
-  menuToggle.addEventListener('click', () => {
+  menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
     menu.classList.toggle('active');
-    overlay.classList.toggle('active');
   });
 
-  overlay.addEventListener('click', () => {
+  menu.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  document.addEventListener('click', () => {
     menu.classList.remove('active');
-    overlay.classList.remove('active');
   });
 </script>
 

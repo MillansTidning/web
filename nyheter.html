@@ -56,16 +56,18 @@
 <script>
   const toggle = document.querySelector(".menu-toggle");
   const menu = document.querySelector(".menu");
-  const overlay = document.querySelector(".overlay");
 
-  toggle.addEventListener("click", () => {
+  toggle.addEventListener("click", (e) => {
+    e.stopPropagation();
     menu.classList.toggle("active");
-    overlay.classList.toggle("active");
   });
 
-  overlay.addEventListener("click", () => {
+  menu.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+
+  document.addEventListener("click", () => {
     menu.classList.remove("active");
-    overlay.classList.remove("active");
   });
 </script>
 
