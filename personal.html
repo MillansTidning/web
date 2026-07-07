@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Millans Tidning</title>
+
+<link rel="icon" type="image/png" href="logga.png">
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header>
+  <h1>
+  <img src="logga.png" alt="Logga" class="logo">
+  Millans Tidning personal
+</h1>
+  <p>En personalsida för Tomas,Kristin,Millan och Sigge</p>
+</header>
+
+<nav>
+  <div class="overlay"></div>
+  <div class="menu-toggle">☰</div>
+
+  <div class="menu">
+    <a href="home.html">Start</a>
+    <a href="nyheter.html">Nyheter</a>
+    <a href="livefakta.html">Livefakta om Millan</a>
+    <a href="recept.html">Recept</a>
+    <a href="knep.html">Knep & knåp</a>
+    <a href="etidning.html">E-tidning</a>
+    <a href="övrigt.html">Övrigt</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="article">
+    <h2>🗞️ Nästa nummer</a></h2>
+    <p>Den kommer ut sista datumet i september.</p>
+  </div>
+
+  <div class="article">
+    <h2>🕵️ Kurs</a></h2>
+    <p>Kristin Sjöö ska gå en kurs för personalansvarig.</p>
+  </div>
+
+
+</div>
+
+<footer>
+  <p>© Millans Tidning 2026</p>
+</footer>
+
+<script>
+  const toggle = document.querySelector(".menu-toggle");
+  const menu = document.querySelector(".menu");
+  const overlay = document.querySelector(".overlay");
+
+  toggle.addEventListener("click", () => {
+    menu.classList.toggle("active");
+    overlay.classList.toggle("active");
+  });
+
+  overlay.addEventListener("click", () => {
+    menu.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+</script>
+
+</body>
+</html>
