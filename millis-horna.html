@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Millans Tidning</title>
+
+<link rel="icon" type="image/png" href="logga.png">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h1>🐾 Milanos  hörna</h1>
+  <p>Direkt från chefredaktör Millan</p>
+</header>
+
+<nav>
+  <div class="overlay"></div>
+  <div class="menu-toggle">☰</div>
+
+  <div class="menu">
+    <a href="home.html">Start</a>
+    <a href="nyheter.html">Nyheter</a>
+    <a href="livefakta.html">Livefakta om Millan</a>
+    <a href="recept.html">Recept</a>
+    <a href="knep.html">Knep & knåp</a>
+    <a href="etidning.html">E-tidning</a>
+    <a href="övrigt.html">Övrigt</a>
+    <a href="millis-horna.html">Milanos hörna</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="article">
+    <h2>📰 Chefredaktören har ordet</h2>
+    <p id="meddelande"></p>
+    <p><strong>/ Chefredaktör Millan</strong></p>
+  </div>
+
+  <div class="article">
+    <h2>🌤️ Millis väderprognos</h2>
+    <p>☀️ Sol: ⭐⭐⭐⭐</p>
+    <p>😴 Tupplursugen: Mycket hög</p>
+    <p>☀️ Väder: Soligt</p>
+    <p>🌡️ Tempratur:</p>
+
+    <p><strong>Millis råd:</strong> Lägg dig där solen är som varmast och flytta dig bara om någon öppnar kylskåpet.</p>
+  </div>
+
+  <div class="article">
+    <h2>🐭 Jaktrapporten</h2>
+ <h>🐭 Allt idag</h>
+    <p>Möss: 0</p>
+    <p>Insekter: 0</p>
+    <p>Råttor: 0</p>
+    <p>Självförtroende efter insatsen: 0 %</p>
+  </div>
+
+  <div class="article">
+    <h2>💭 Dagens tanke</h2>
+    <p style="font-size: 1.3rem;">"När får man gå helt fritt?"</p>
+  </div>
+<div class="article">
+    <h2>📦 Veckans test</h2>
+    <p><strong>Testobjekt:</strong> Kartong från förrådet</p>
+    <p>Komfort:</p>
+    <p>Gömställe:</p>
+    <p><strong>Millis betyg:</strong> Mycket godkänd.</p>
+  </div>
+  
+
+  <div class="article">
+    <h2>😼 Veckans citat</h2>
+    <p style="font-size: 1.3rem;">
+      "Man ska vara ute när man kan man vet inte när man måste gå in.."
+    </p>
+  </div>
+
+</div>
+
+<footer>
+  <p>© Millans Tidning 2026</p>
+</footer>
+
+<script>
+  const toggle = document.querySelector(".menu-toggle");
+  const menu = document.querySelector(".menu");
+
+  toggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    menu.classList.toggle("active");
+  });
+
+  menu.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+
+  document.addEventListener("click", () => {
+    menu.classList.remove("active");
+  });
+
+  const meddelanden = [
+    "Hej alla läsare det börjar bli jobbit att ligga med alla katungar men det är ochså lite mysigt.",
+
+    "Jag tycker att Persika ska slutsa klättra på mig så mycket.",
+
+
+  ];
+
+  document.getElementById("meddelande").textContent =
+    meddelanden[Math.floor(Math.random() * meddelanden.length)];
+
+</script>
+
+</body>
+</html>

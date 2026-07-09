@@ -1,0 +1,7 @@
+<div class="article">
+    <h2>📦 Veckans test</h2>
+    <p><strong>Testobjekt:</strong> Kartong från förrådet</p>
+    <p>Komfort: ⭐⭐⭐⭐⭐</p>
+    <p>Gömställe: ⭐⭐⭐⭐☆</p>
+    <p><strong>Millis betyg:</strong> Mycket godkänd.</p>
+  </div>
