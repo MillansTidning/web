@@ -5,3 +5,8 @@
     <p>Gömställe: ⭐⭐⭐⭐☆</p>
     <p><strong>Millis betyg:</strong> Mycket godkänd.</p>
   </div>
+
+
+
+
+    <p><strong>Millis råd:</strong> Lägg dig där solen är som varmast och .</p>
