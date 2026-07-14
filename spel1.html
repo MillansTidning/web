@@ -1,0 +1,780 @@
+
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Millans Tidning</title>
+  <link rel="icon" type="image/png" href="logga.png">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --dark: #2f2418;
+      --green: #8ecf8e;
+      --light-green: #dff5df;
+      --cream: #fff7dc;
+      --yellow: #ffe28a;
+      --orange: #ffb86b;
+      --white: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      color: var(--dark);
+      background: linear-gradient(180deg, var(--light-green), var(--cream));
+    }
+
+    header {
+      padding: 34px 20px;
+      text-align: center;
+      background: var(--green);
+      border-bottom: 8px dotted white;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(2rem, 7vw, 3.2rem);
+    }
+
+    header p {
+      margin: 10px 0 0;
+      font-weight: bold;
+    }
+
+    /* Navigation */
+    nav {
+      position: relative;
+      z-index: 2000;
+      padding: 14px 20px;
+      background: white;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    }
+
+    .menu {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
+    }
+
+    .menu a {
+      display: inline-block;
+      color: var(--dark);
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .menu a:hover {
+      color: #3c7a3c;
+    }
+
+    .menu-toggle {
+      display: none;
+      width: fit-content;
+      padding: 6px 10px;
+      color: var(--dark);
+      font-size: 30px;
+      line-height: 1;
+      cursor: pointer;
+      user-select: none;
+      border-radius: 10px;
+    }
+
+    .menu-toggle:hover {
+      background: var(--light-green);
+    }
+
+    main {
+      width: min(1000px, calc(100% - 24px));
+      margin: 24px auto;
+    }
+
+    .card {
+      padding: 24px;
+      margin-bottom: 24px;
+      background: white;
+      border: 3px solid var(--dark);
+      border-radius: 26px;
+      box-shadow: 8px 8px 0 rgba(47,36,24,0.18);
+    }
+
+    .setup-grid {
+      display: grid;
+      gap: 22px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .choice-group h2 {
+      margin-top: 0;
+    }
+
+    .choice-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .choice {
+      padding: 13px 16px;
+      text-align: left;
+      font: inherit;
+      font-weight: bold;
+      color: var(--dark);
+      background: var(--cream);
+      border: 2px solid var(--dark);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .choice:hover,
+    .choice.selected {
+      background: var(--yellow);
+      transform: translateY(-2px);
+      box-shadow: 4px 4px 0 rgba(47,36,24,0.16);
+    }
+
+    .start-row {
+      margin-top: 22px;
+      text-align: center;
+    }
+
+    .main-button {
+      padding: 13px 24px;
+      color: var(--dark);
+      font: inherit;
+      font-weight: bold;
+      background: var(--orange);
+      border: 2px solid var(--dark);
+      border-radius: 18px;
+      cursor: pointer;
+      box-shadow: 4px 4px 0 rgba(47,36,24,0.18);
+    }
+
+    .main-button:hover {
+      background: var(--yellow);
+      transform: translateY(-2px);
+    }
+
+    .hud {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    .game-area {
+      position: relative;
+      height: 500px;
+      overflow: hidden;
+      border: 3px solid var(--dark);
+      border-radius: 24px;
+      background:
+        linear-gradient(180deg, #e7f3ff 0 62%, #d9c49b 62% 100%);
+      touch-action: none;
+      cursor: none;
+    }
+
+    .window {
+      position: absolute;
+      left: 7%;
+      top: 8%;
+      width: 180px;
+      height: 120px;
+      background: linear-gradient(#bfe6ff, #e9f8ff);
+      border: 8px solid #8b5e3c;
+      border-radius: 6px;
+      box-shadow: inset 0 0 0 3px white;
+    }
+
+    .sofa {
+      position: absolute;
+      right: 6%;
+      bottom: 18%;
+      width: 220px;
+      height: 100px;
+      background: #8ecf8e;
+      border: 5px solid #426b47;
+      border-radius: 28px 28px 12px 12px;
+    }
+
+    .cat {
+      position: absolute;
+      left: 20%;
+      top: 48%;
+      z-index: 3;
+      font-size: 5.5rem;
+      transform: translate(-50%, -50%);
+      user-select: none;
+      transition: filter 0.2s ease;
+    }
+
+    .cat.caught {
+      animation: cat-catch 0.4s ease;
+    }
+
+    .toy {
+      position: absolute;
+      left: 75%;
+      top: 35%;
+      z-index: 4;
+      font-size: 3.5rem;
+      transform: translate(-50%, -50%);
+      user-select: none;
+      pointer-events: none;
+      filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
+    }
+
+    .message {
+      min-height: 30px;
+      margin: 16px 0 0;
+      text-align: center;
+      font-size: 1.15rem;
+      font-weight: bold;
+    }
+
+    .game-over {
+      display: none;
+      text-align: center;
+    }
+
+    .game-over.show {
+      display: block;
+      animation: show-up 0.45s ease;
+    }
+
+    .game-over h2 {
+      font-size: 2rem;
+    }
+
+    footer {
+      margin-top: 35px;
+      padding: 20px;
+      color: white;
+      text-align: center;
+      background: #3c7a3c;
+    }
+
+    @keyframes cat-catch {
+      0% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.25) rotate(-8deg); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    @keyframes show-up {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 700px) {
+      nav {
+        padding: 10px 12px;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: min(280px, 85vw);
+        padding: 10px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        background: white;
+        border-radius: 0 0 18px 0;
+        box-shadow: 0 12px 25px rgba(0,0,0,0.22);
+      }
+
+      .menu.active {
+        display: flex;
+      }
+
+      .menu a {
+        display: block;
+        padding: 13px 14px;
+        border-radius: 10px;
+      }
+
+      .menu a:hover {
+        background: var(--light-green);
+      }
+
+      .game-area {
+        height: 420px;
+      }
+
+      .cat {
+        font-size: 4.5rem;
+      }
+
+      .toy {
+        font-size: 3rem;
+      }
+
+      .window {
+        width: 130px;
+        height: 90px;
+      }
+
+      .sofa {
+        width: 150px;
+        height: 80px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🐱 Lek med Millan</h1>
+  <p>Du är leksaken. Försök hålla dig undan när Millan jagar!</p>
+</header>
+
+<nav>
+  <div class="menu-toggle" role="button" tabindex="0" aria-label="Öppna meny" aria-expanded="false">☰</div>
+
+  <div class="menu">
+    <a href="home.html">Start</a>
+    <a href="livefakta.html">Livefakta om Millan</a>
+    <a href="spel1.html">Lek med Millan</a>
+    <a href="spel2.html">Kurragömma med Millan</a>
+  </div>
+</nav>
+<main>
+
+  <section class="card" id="setupScreen">
+    <div class="setup-grid">
+
+      <div class="choice-group">
+        <h2>1. Välj nivå</h2>
+
+        <div class="choice-list">
+          <button class="choice level-choice selected" data-level="kitten">
+            🟢 Kattunge – långsam
+          </button>
+
+          <button class="choice level-choice" data-level="playful">
+            🟡 Busig – snabbare
+          </button>
+
+          <button class="choice level-choice" data-level="hunter">
+            🔴 Jägaren – riktigt snabb
+          </button>
+
+          <button class="choice level-choice" data-level="editor">
+            ⚫ Chefredaktör Millan – extrem
+          </button>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h2>2. Välj leksak</h2>
+
+        <div class="choice-list">
+          <button class="choice toy-choice selected" data-toy="🪶">
+            🪶 Fjädervippa
+          </button>
+
+          <button class="choice toy-choice" data-toy="🐭">
+            🐭 Leksaksmus
+          </button>
+
+          <button class="choice toy-choice" data-toy="🧶">
+            🧶 Garnnystan
+          </button>
+
+          <button class="choice toy-choice" data-toy="🔴">
+            🔴 Boll
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="start-row">
+      <button class="main-button" id="startButton">Starta spelet</button>
+    </div>
+  </section>
+
+  <section class="card" id="gameScreen" hidden>
+    <div class="hud">
+      <span>Poäng: <strong id="score">0</strong></span>
+      <span>Tid: <strong id="time">45</strong> sek</span>
+      <span>Rekord: <strong id="highScore">0</strong></span>
+      <span>Nivå: <strong id="levelName">Kattunge</strong></span>
+    </div>
+
+    <div class="game-area" id="gameArea">
+      <div class="window"></div>
+      <div class="sofa"></div>
+
+      <div class="cat" id="cat" aria-label="Millan">🐱</div>
+      <div class="toy" id="toy" aria-label="Leksak">🪶</div>
+    </div>
+
+    <p class="message" id="message">
+      Flytta musen eller fingret för att styra leksaken.
+    </p>
+  </section>
+
+  <section class="card game-over" id="gameOver">
+    <h2>😺 Millan fångade leksaken!</h2>
+    <p>Du fick <strong id="finalScore">0</strong> poäng.</p>
+    <p>Du klarade dig i <strong id="survivalTime">0</strong> sekunder.</p>
+    <button class="main-button" id="playAgainButton">Spela igen</button>
+  </section>
+
+</main>
+
+<footer>
+  <p>© Millans Tidning 2026</p>
+</footer>
+
+<script>
+  const setupScreen = document.getElementById("setupScreen");
+  const gameScreen = document.getElementById("gameScreen");
+  const gameOver = document.getElementById("gameOver");
+
+  const startButton = document.getElementById("startButton");
+  const playAgainButton = document.getElementById("playAgainButton");
+
+  const gameArea = document.getElementById("gameArea");
+  const cat = document.getElementById("cat");
+  const toy = document.getElementById("toy");
+
+  const scoreElement = document.getElementById("score");
+  const timeElement = document.getElementById("time");
+  const highScoreElement = document.getElementById("highScore");
+  const levelNameElement = document.getElementById("levelName");
+  const finalScoreElement = document.getElementById("finalScore");
+  const survivalTimeElement = document.getElementById("survivalTime");
+  const message = document.getElementById("message");
+
+  const levels = {
+    kitten: {
+      name: "Kattunge",
+      speed: 1.2,
+      pointsPerSecond: 1,
+      catchDistance: 46
+    },
+    playful: {
+      name: "Busig",
+      speed: 2.0,
+      pointsPerSecond: 2,
+      catchDistance: 50
+    },
+    hunter: {
+      name: "Jägaren",
+      speed: 2.9,
+      pointsPerSecond: 3,
+      catchDistance: 54
+    },
+    editor: {
+      name: "Chefredaktör Millan",
+      speed: 4.0,
+      pointsPerSecond: 5,
+      catchDistance: 58
+    }
+  };
+
+  let selectedLevel = "kitten";
+  let selectedToy = "🪶";
+
+  let catX = 140;
+  let catY = 240;
+  let toyX = 650;
+  let toyY = 170;
+
+  let score = 0;
+  let timeLeft = 45;
+  let elapsed = 0;
+  let gameRunning = false;
+  let lastFrame = 0;
+  let scoreTimer = null;
+  let countdownTimer = null;
+
+  const savedHighScore =
+    Number(localStorage.getItem("millanPlayHighScore")) || 0;
+
+  highScoreElement.textContent = savedHighScore;
+
+  document.querySelectorAll(".level-choice").forEach((button) => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll(".level-choice").forEach((item) => {
+        item.classList.remove("selected");
+      });
+
+      button.classList.add("selected");
+      selectedLevel = button.dataset.level;
+    });
+  });
+
+  document.querySelectorAll(".toy-choice").forEach((button) => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll(".toy-choice").forEach((item) => {
+        item.classList.remove("selected");
+      });
+
+      button.classList.add("selected");
+      selectedToy = button.dataset.toy;
+      toy.textContent = selectedToy;
+    });
+  });
+
+  function placeCharacters() {
+    catX = gameArea.clientWidth * 0.2;
+    catY = gameArea.clientHeight * 0.55;
+
+    toyX = gameArea.clientWidth * 0.75;
+    toyY = gameArea.clientHeight * 0.35;
+
+    updatePositions();
+  }
+
+  function updatePositions() {
+    cat.style.left = `${catX}px`;
+    cat.style.top = `${catY}px`;
+
+    toy.style.left = `${toyX}px`;
+    toy.style.top = `${toyY}px`;
+  }
+
+  function setToyPosition(clientX, clientY) {
+    const rect = gameArea.getBoundingClientRect();
+
+    toyX = Math.max(20, Math.min(rect.width - 20, clientX - rect.left));
+    toyY = Math.max(20, Math.min(rect.height - 20, clientY - rect.top));
+
+    toy.style.left = `${toyX}px`;
+    toy.style.top = `${toyY}px`;
+  }
+
+  gameArea.addEventListener("pointermove", (event) => {
+    if (!gameRunning) {
+      return;
+    }
+
+    setToyPosition(event.clientX, event.clientY);
+  });
+
+  gameArea.addEventListener("pointerdown", (event) => {
+    if (!gameRunning) {
+      return;
+    }
+
+    setToyPosition(event.clientX, event.clientY);
+  });
+
+  function gameLoop(timestamp) {
+    if (!gameRunning) {
+      return;
+    }
+
+    const delta = Math.min((timestamp - lastFrame) / 16.67, 2);
+    lastFrame = timestamp;
+
+    const level = levels[selectedLevel];
+
+    const dx = toyX - catX;
+    const dy = toyY - catY;
+    const distance = Math.hypot(dx, dy);
+
+    if (distance > 0) {
+      catX += (dx / distance) * level.speed * delta;
+      catY += (dy / distance) * level.speed * delta;
+    }
+
+    const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+    cat.style.rotate = `${Math.max(-18, Math.min(18, angle / 5))}deg`;
+
+    updatePositions();
+
+    if (distance < level.catchDistance) {
+      finishGame();
+      return;
+    }
+
+    requestAnimationFrame(gameLoop);
+  }
+
+  function startGame() {
+    score = 0;
+    timeLeft = 45;
+    elapsed = 0;
+    gameRunning = true;
+
+    scoreElement.textContent = "0";
+    timeElement.textContent = "45";
+    levelNameElement.textContent = levels[selectedLevel].name;
+    toy.textContent = selectedToy;
+    message.textContent = "Flytta leksaken och håll dig undan från Millan!";
+
+    setupScreen.hidden = true;
+    gameOver.classList.remove("show");
+    gameScreen.hidden = false;
+
+    placeCharacters();
+
+    clearInterval(scoreTimer);
+    clearInterval(countdownTimer);
+
+    scoreTimer = setInterval(() => {
+      if (!gameRunning) {
+        return;
+      }
+
+      score += levels[selectedLevel].pointsPerSecond;
+      elapsed += 1;
+      scoreElement.textContent = score;
+    }, 1000);
+
+    countdownTimer = setInterval(() => {
+      if (!gameRunning) {
+        return;
+      }
+
+      timeLeft -= 1;
+      timeElement.textContent = timeLeft;
+
+      if (timeLeft <= 0) {
+        winGame();
+      }
+    }, 1000);
+
+    lastFrame = performance.now();
+    requestAnimationFrame(gameLoop);
+  }
+
+  function saveHighScore() {
+    const oldHighScore =
+      Number(localStorage.getItem("millanPlayHighScore")) || 0;
+
+    if (score > oldHighScore) {
+      localStorage.setItem("millanPlayHighScore", String(score));
+      highScoreElement.textContent = score;
+      return true;
+    }
+
+    return false;
+  }
+
+  function finishGame() {
+    if (!gameRunning) {
+      return;
+    }
+
+    gameRunning = false;
+    clearInterval(scoreTimer);
+    clearInterval(countdownTimer);
+
+    cat.classList.add("caught");
+
+    setTimeout(() => {
+      cat.classList.remove("caught");
+    }, 450);
+
+    finalScoreElement.textContent = score;
+    survivalTimeElement.textContent = elapsed;
+
+    const isRecord = saveHighScore();
+
+    gameScreen.hidden = true;
+    gameOver.classList.add("show");
+
+    gameOver.querySelector("h2").textContent =
+      isRecord
+        ? "🏆 Nytt rekord! Millan fångade leksaken!"
+        : "😺 Millan fångade leksaken!";
+  }
+
+  function winGame() {
+    gameRunning = false;
+    clearInterval(scoreTimer);
+    clearInterval(countdownTimer);
+
+    score += 25;
+    finalScoreElement.textContent = score;
+    survivalTimeElement.textContent = "45";
+
+    const isRecord = saveHighScore();
+
+    gameScreen.hidden = true;
+    gameOver.classList.add("show");
+
+    gameOver.querySelector("h2").textContent =
+      isRecord
+        ? "🏆 Nytt rekord! Du klarade hela tiden!"
+        : "🎉 Du höll undan leksaken i 45 sekunder!";
+  }
+
+  startButton.addEventListener("click", startGame);
+
+  playAgainButton.addEventListener("click", () => {
+    gameOver.classList.remove("show");
+    setupScreen.hidden = false;
+  });
+
+  window.addEventListener("resize", () => {
+    if (!gameScreen.hidden) {
+      placeCharacters();
+    }
+  });
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const menuToggle = document.querySelector(".menu-toggle");
+  const menu = document.querySelector(".menu");
+
+  if (!menuToggle || !menu) {
+    return;
+  }
+
+  function toggleMenu(event) {
+    event.stopPropagation();
+    const isOpen = menu.classList.toggle("active");
+    menuToggle.setAttribute("aria-expanded", String(isOpen));
+  }
+
+  menuToggle.addEventListener("click", toggleMenu);
+
+  menuToggle.addEventListener("keydown", function (event) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      toggleMenu(event);
+    }
+  });
+
+  menu.addEventListener("click", function (event) {
+    event.stopPropagation();
+  });
+
+  document.addEventListener("click", function () {
+    menu.classList.remove("active");
+    menuToggle.setAttribute("aria-expanded", "false");
+  });
+});
+</script>
+</body>
+
+</html>

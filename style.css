@@ -230,3 +230,120 @@ footer {
   }
 
 }
+
+/* ===========================
+   🐾 Millans hemliga lucka
+   =========================== */
+
+.surprise-box {
+  text-align: center;
+}
+
+.surprise-button {
+  background: #ffe28a;
+  color: #2f2418;
+  border: 2px solid #2f2418;
+  border-radius: 14px;
+  padding: 12px 20px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 rgba(47, 36, 24, 0.18);
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.surprise-button:hover {
+  background: #ffb86b;
+  transform: translateY(-2px);
+}
+
+.surprise-content {
+  display: none;
+  margin-top: 20px;
+}
+
+.surprise-content.show {
+  display: block;
+  animation: reveal-surprise 0.5s ease;
+}
+
+.surprise-content img {
+  display: block;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 15px;
+  border: 3px solid #2f2418;
+  border-radius: 20px;
+}
+
+@keyframes reveal-surprise {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===========================
+   MOBILMENY
+   =========================== */
+
+.menu-toggle {
+  display: none;
+  font-size: 30px;
+  color: #2f2418;
+  cursor: pointer;
+}
+
+.menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+}
+
+@media (max-width: 600px) {
+
+  nav {
+    position: relative;
+    justify-content: flex-start;
+    padding: 12px;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .menu {
+    display: none;
+    flex-direction: column;
+
+    position: absolute;
+    top: 100%;
+    left: 0;
+
+    width: 230px;
+    padding: 8px;
+
+    background: white;
+    border-radius: 0 0 18px 0;
+    box-shadow: 0 8px 18px rgba(0,0,0,.2);
+  }
+
+  .menu.active {
+    display: flex;
+  }
+
+  .menu a {
+    margin: 4px 0;
+    text-align: left;
+    border-radius: 12px;
+  }
+}

@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Kurragömma med Millan – Millans Tidning</title>
+  <link rel="icon" type="image/png" href="logga.png">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --dark: #2f2418;
+      --green: #8ecf8e;
+      --cream: #fff7dc;
+      --yellow: #ffe28a;
+      --orange: #ffb86b;
+      --white: #ffffff;
+      --blue: #dff1ff;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      color: var(--dark);
+      background: linear-gradient(180deg, #dff5df, var(--cream));
+    }
+
+    header {
+      padding: 34px 20px;
+      text-align: center;
+      background: var(--green);
+      border-bottom: 8px dotted white;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(2rem, 7vw, 3.2rem);
+    }
+
+    header p {
+      margin: 10px 0 0;
+      font-weight: bold;
+    }
+
+    nav {
+      position: relative;
+      z-index: 20;
+      padding: 14px;
+      text-align: center;
+      background: white;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    }
+
+    .menu {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px 24px;
+    }
+
+    nav a {
+      display: inline-block;
+      color: var(--dark);
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    nav a:hover,
+    nav a:focus-visible {
+      color: #3c7a3c;
+    }
+
+    .menu-toggle {
+      display: none;
+      padding: 6px 12px;
+      color: var(--dark);
+      font-size: 2rem;
+      line-height: 1;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+    }
+
+    .overlay {
+      display: none;
+    }
+
+    main {
+      width: min(1000px, calc(100% - 24px));
+      margin: 24px auto;
+    }
+
+    .card {
+      padding: 24px;
+      margin-bottom: 24px;
+      background: white;
+      border: 3px solid var(--dark);
+      border-radius: 26px;
+      box-shadow: 8px 8px 0 rgba(47, 36, 24, 0.18);
+    }
+
+    .level-buttons {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      margin: 20px 0;
+    }
+
+    .level-button,
+    .main-button {
+      padding: 13px 18px;
+      color: var(--dark);
+      font: inherit;
+      font-weight: bold;
+      border: 2px solid var(--dark);
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 4px 4px 0 rgba(47, 36, 24, 0.18);
+    }
+
+    .level-button {
+      background: var(--cream);
+    }
+
+    .level-button:hover,
+    .level-button.selected {
+      background: var(--yellow);
+      transform: translateY(-2px);
+    }
+
+    .main-button {
+      background: var(--orange);
+    }
+
+    .main-button:hover {
+      background: var(--yellow);
+      transform: translateY(-2px);
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .hud {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    .room {
+      position: relative;
+      height: 520px;
+      overflow: hidden;
+      border: 3px solid var(--dark);
+      border-radius: 24px;
+      background:
+        linear-gradient(180deg, var(--blue) 0 68%, #d7bd8c 68% 100%);
+    }
+
+    .window {
+      position: absolute;
+      top: 35px;
+      left: 40px;
+      width: 170px;
+      height: 115px;
+      background: linear-gradient(#bce6ff, #f6fcff);
+      border: 8px solid #8b5e3c;
+      border-radius: 6px;
+    }
+
+    .rug {
+      position: absolute;
+      left: 28%;
+      bottom: 20px;
+      width: 44%;
+      height: 95px;
+      background: #f3d77a;
+      border: 4px solid #b98d2a;
+      border-radius: 50%;
+    }
+
+    .spot {
+      position: absolute;
+      z-index: 4;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.16s ease, filter 0.16s ease;
+    }
+
+    .spot:hover {
+      transform: scale(1.05);
+      filter: brightness(1.05);
+    }
+
+    .spot:active {
+      transform: scale(0.96);
+    }
+
+    .spot-label {
+      display: block;
+      margin-top: -4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: var(--dark);
+      text-align: center;
+    }
+
+    .sofa {
+      right: 45px;
+      bottom: 75px;
+      font-size: 7rem;
+    }
+
+    .box {
+      left: 70px;
+      bottom: 65px;
+      font-size: 5.6rem;
+    }
+
+    .plant {
+      right: 70px;
+      top: 55px;
+      font-size: 5.2rem;
+    }
+
+    .curtain {
+      left: 230px;
+      top: 35px;
+      font-size: 5.8rem;
+    }
+
+    .basket {
+      left: 44%;
+      bottom: 55px;
+      font-size: 5.2rem;
+    }
+
+    .bed {
+      left: 34%;
+      top: 160px;
+      font-size: 6rem;
+    }
+
+    .cat {
+      position: absolute;
+      z-index: 3;
+      display: none;
+      transform: translate(-50%, -50%);
+      filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.22));
+      pointer-events: none;
+      user-select: none;
+      transition:
+        font-size 0.25s ease,
+        opacity 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    .cat.found {
+      z-index: 7;
+      font-size: 5rem !important;
+      opacity: 1 !important;
+      animation: cat-pop 0.45s ease;
+    }
+
+    .message {
+      min-height: 32px;
+      margin: 16px 0 0;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .game-over {
+      display: none;
+      text-align: center;
+    }
+
+    .game-over.show {
+      display: block;
+      animation: show-up 0.45s ease;
+    }
+
+    @keyframes cat-pop {
+      0% {
+        opacity: 0.45;
+        transform: translate(-50%, -50%) scale(0.65) rotate(-8deg);
+      }
+
+      70% {
+        transform: translate(-50%, -50%) scale(1.18) rotate(4deg);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    @keyframes show-up {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    footer {
+      margin-top: 35px;
+      padding: 20px;
+      color: white;
+      text-align: center;
+      background: #3c7a3c;
+    }
+
+    @media (max-width: 700px) {
+      nav {
+        min-height: 58px;
+        padding: 8px 12px;
+        text-align: left;
+      }
+
+      .menu-toggle {
+        position: relative;
+        z-index: 22;
+        display: block;
+      }
+
+      .menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 22;
+        display: none;
+        padding: 10px 18px 18px;
+        background: white;
+        box-shadow: 0 8px 14px rgba(0, 0, 0, 0.16);
+      }
+
+      .menu.open {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+      }
+
+      .menu a {
+        display: block;
+        padding: 13px 8px;
+        border-bottom: 1px solid #e7e1d5;
+      }
+
+      .menu a:last-child {
+        border-bottom: 0;
+      }
+
+      .overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 19;
+        background: rgba(0, 0, 0, 0.35);
+      }
+
+      .overlay.show {
+        display: block;
+      }
+
+      .room {
+        height: 460px;
+      }
+
+      .sofa {
+        right: 16px;
+        font-size: 5.6rem;
+      }
+
+      .box {
+        left: 20px;
+        font-size: 4.6rem;
+      }
+
+      .plant {
+        right: 25px;
+        font-size: 4.4rem;
+      }
+
+      .curtain {
+        left: 140px;
+        font-size: 4.8rem;
+      }
+
+      .basket {
+        left: 38%;
+        font-size: 4.5rem;
+      }
+
+      .bed {
+        left: 28%;
+        font-size: 5rem;
+      }
+
+      .window {
+        left: 22px;
+        width: 130px;
+        height: 90px;
+      }
+
+      .cat.found {
+        font-size: 4.2rem !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🙈 Kurragömma med Millan</h1>
+  <p>På lätt och busig syns en liten del av Millan. På svår är hon helt gömd!</p>
+</header>
+
+<nav>
+  <button
+    class="menu-toggle"
+    id="menuToggle"
+    type="button"
+    aria-label="Öppna meny"
+    aria-expanded="false"
+    aria-controls="menu"
+  >
+    ☰
+  </button>
+
+  <div class="menu" id="menu">
+    <a href="home.html">Start</a>
+    <a href="livefakta.html">Livefakta om Millan</a>
+    <a href="spel1.html">Lek med Millan</a>
+    <a href="spel2.html" aria-current="page">Kurragömma med Millan</a>
+  </div>
+</nav>
+
+<div class="overlay" id="overlay"></div>
+
+<main>
+  <section class="card center" id="setupScreen">
+    <h2>Välj svårighetsgrad</h2>
+
+    <div class="level-buttons">
+      <button class="level-button selected" type="button" data-level="easy">
+        🟢 Lätt – Millan syns tydligt
+      </button>
+
+      <button class="level-button" type="button" data-level="medium">
+        🟡 Busig – Millan syns lite
+      </button>
+
+      <button class="level-button" type="button" data-level="hard">
+        🔴 Svår – Millan syns inte alls
+      </button>
+    </div>
+
+    <button class="main-button" id="startButton" type="button">
+      Starta spelet
+    </button>
+  </section>
+
+  <section class="card" id="gameScreen" hidden>
+    <div class="hud">
+      <span>Poäng: <strong id="score">0</strong></span>
+      <span>Tid: <strong id="time">20</strong> sek</span>
+      <span>Runda: <strong id="round">1</strong></span>
+      <span>Rekord: <strong id="highScore">0</strong></span>
+    </div>
+
+    <div class="room" id="room">
+      <div class="window"></div>
+      <div class="rug"></div>
+
+      <div class="cat" id="cat" aria-hidden="true">🐱</div>
+
+      <button class="spot sofa" type="button" data-spot="sofa" aria-label="Titta bakom soffan">
+        🛋️
+        <span class="spot-label">Soffan</span>
+      </button>
+
+      <button class="spot box" type="button" data-spot="box" aria-label="Titta i kartongen">
+        📦
+        <span class="spot-label">Kartongen</span>
+      </button>
+
+      <button class="spot plant" type="button" data-spot="plant" aria-label="Titta bakom växten">
+        🪴
+        <span class="spot-label">Växten</span>
+      </button>
+
+      <button class="spot curtain" type="button" data-spot="curtain" aria-label="Titta bakom gardinen">
+        🪟
+        <span class="spot-label">Gardinen</span>
+      </button>
+
+      <button class="spot basket" type="button" data-spot="basket" aria-label="Titta i korgen">
+        🧺
+        <span class="spot-label">Korgen</span>
+      </button>
+
+      <button class="spot bed" type="button" data-spot="bed" aria-label="Titta under sängen">
+        🛏️
+        <span class="spot-label">Sängen</span>
+      </button>
+    </div>
+
+    <p class="message" id="message">
+      Titta noga och klicka på rätt gömställe!
+    </p>
+  </section>
+
+  <section class="card game-over" id="gameOver">
+    <h2 id="gameOverTitle">Spelet är slut!</h2>
+    <p>Du hittade Millan <strong id="finalScore">0</strong> gånger.</p>
+    <button class="main-button" id="playAgainButton" type="button">
+      Spela igen
+    </button>
+  </section>
+</main>
+
+<footer>
+  <p>© Millans Tidning 2026</p>
+</footer>
+
+<script>
+  const menuToggle = document.getElementById("menuToggle");
+  const menu = document.getElementById("menu");
+  const overlay = document.getElementById("overlay");
+
+  function closeMenu() {
+    menu.classList.remove("open");
+    overlay.classList.remove("show");
+    menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.setAttribute("aria-label", "Öppna meny");
+  }
+
+  menuToggle.addEventListener("click", () => {
+    const isOpen = menu.classList.toggle("open");
+
+    overlay.classList.toggle("show", isOpen);
+    menuToggle.setAttribute("aria-expanded", String(isOpen));
+    menuToggle.setAttribute(
+      "aria-label",
+      isOpen ? "Stäng meny" : "Öppna meny"
+    );
+  });
+
+  overlay.addEventListener("click", closeMenu);
+
+  menu.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", closeMenu);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeMenu();
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 700) {
+      closeMenu();
+    }
+  });
+
+  const setupScreen = document.getElementById("setupScreen");
+  const gameScreen = document.getElementById("gameScreen");
+  const gameOver = document.getElementById("gameOver");
+
+  const startButton = document.getElementById("startButton");
+  const playAgainButton = document.getElementById("playAgainButton");
+
+  const scoreElement = document.getElementById("score");
+  const timeElement = document.getElementById("time");
+  const roundElement = document.getElementById("round");
+  const highScoreElement = document.getElementById("highScore");
+  const finalScoreElement = document.getElementById("finalScore");
+  const gameOverTitle = document.getElementById("gameOverTitle");
+  const message = document.getElementById("message");
+
+  const cat = document.getElementById("cat");
+  const spots = Array.from(document.querySelectorAll(".spot"));
+
+  const levels = {
+    easy: {
+      name: "Lätt",
+      seconds: 20,
+      catOpacity: 0.92,
+      catSize: "3.2rem"
+    },
+    medium: {
+      name: "Busig",
+      seconds: 12,
+      catOpacity: 0.5,
+      catSize: "2.5rem"
+    },
+    hard: {
+      name: "Svår",
+      seconds: 7,
+      catOpacity: 0,
+      catSize: "2rem"
+    }
+  };
+
+  const catPositions = {
+    sofa: { left: "82%", top: "68%" },
+    box: { left: "15%", top: "73%" },
+    plant: { left: "85%", top: "25%" },
+    curtain: { left: "31%", top: "23%" },
+    basket: { left: "50%", top: "73%" },
+    bed: { left: "45%", top: "47%" }
+  };
+
+  let selectedLevel = "easy";
+  let hiddenSpot = "";
+  let score = 0;
+  let round = 1;
+  let timeLeft = 20;
+  let timer = null;
+  let gameRunning = false;
+  let changingRound = false;
+
+  const savedHighScore =
+    Number(localStorage.getItem("millanHideHighScore")) || 0;
+
+  highScoreElement.textContent = savedHighScore;
+
+  document.querySelectorAll(".level-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll(".level-button").forEach((item) => {
+        item.classList.remove("selected");
+      });
+
+      button.classList.add("selected");
+      selectedLevel = button.dataset.level;
+    });
+  });
+
+  function showHiddenPart() {
+    const position = catPositions[hiddenSpot];
+    const level = levels[selectedLevel];
+
+    cat.classList.remove("found");
+    cat.style.left = position.left;
+    cat.style.top = position.top;
+    cat.style.fontSize = level.catSize;
+
+    if (selectedLevel === "hard") {
+      cat.style.display = "none";
+      cat.style.opacity = "0";
+    } else {
+      cat.style.display = "block";
+      cat.style.opacity = String(level.catOpacity);
+    }
+  }
+
+  function chooseHidingSpot() {
+    const choices = spots
+      .map((spot) => spot.dataset.spot)
+      .filter((spotName) => spotName !== hiddenSpot);
+
+    hiddenSpot = choices[Math.floor(Math.random() * choices.length)];
+
+    showHiddenPart();
+
+    if (selectedLevel === "hard") {
+      message.textContent =
+        "Millan är helt gömd! Gissa vilket gömställe hon har valt.";
+    } else if (selectedLevel === "medium") {
+      message.textContent =
+        "Titta noga... bara en liten del av Millan syns!";
+    } else {
+      message.textContent =
+        "Titta noga... en del av Millan syns bakom gömstället!";
+    }
+  }
+
+  function startRoundTimer() {
+    clearInterval(timer);
+
+    timeLeft = levels[selectedLevel].seconds;
+    timeElement.textContent = timeLeft;
+
+    timer = setInterval(() => {
+      timeLeft -= 1;
+      timeElement.textContent = timeLeft;
+
+      if (timeLeft <= 0) {
+        finishGame();
+      }
+    }, 1000);
+  }
+
+  function startGame() {
+    score = 0;
+    round = 1;
+    gameRunning = true;
+    changingRound = false;
+
+    scoreElement.textContent = score;
+    roundElement.textContent = round;
+
+    setupScreen.hidden = true;
+    gameOver.classList.remove("show");
+    gameScreen.hidden = false;
+
+    chooseHidingSpot();
+    startRoundTimer();
+  }
+
+  function revealCat() {
+    cat.style.display = "block";
+    cat.classList.add("found");
+    cat.style.opacity = "1";
+  }
+
+  function handleSpotClick(event) {
+    if (!gameRunning || changingRound) {
+      return;
+    }
+
+    const clickedSpot = event.currentTarget.dataset.spot;
+
+    if (clickedSpot === hiddenSpot) {
+      changingRound = true;
+      clearInterval(timer);
+      revealCat();
+
+      score += 1;
+      scoreElement.textContent = score;
+      message.textContent =
+        "😺 Där var Millan! Hon gömmer sig igen...";
+
+      setTimeout(() => {
+        round += 1;
+        roundElement.textContent = round;
+        changingRound = false;
+        chooseHidingSpot();
+        startRoundTimer();
+      }, 1000);
+    } else {
+      message.textContent =
+        selectedLevel === "hard"
+          ? "Inte där! Försök med ett annat gömställe."
+          : "Inte där! Titta efter öron eller ögon.";
+    }
+  }
+
+  spots.forEach((spot) => {
+    spot.addEventListener("click", handleSpotClick);
+  });
+
+  function finishGame() {
+    if (!gameRunning) {
+      return;
+    }
+
+    gameRunning = false;
+    changingRound = true;
+    clearInterval(timer);
+
+    revealCat();
+    finalScoreElement.textContent = score;
+
+    const oldHighScore =
+      Number(localStorage.getItem("millanHideHighScore")) || 0;
+
+    if (score > oldHighScore) {
+      localStorage.setItem("millanHideHighScore", String(score));
+      highScoreElement.textContent = score;
+      gameOverTitle.textContent = "🏆 Nytt rekord!";
+    } else {
+      gameOverTitle.textContent = "⏰ Tiden tog slut!";
+    }
+
+    setTimeout(() => {
+      gameScreen.hidden = true;
+      gameOver.classList.add("show");
+    }, 900);
+  }
+
+  startButton.addEventListener("click", startGame);
+
+  playAgainButton.addEventListener("click", () => {
+    gameOver.classList.remove("show");
+    setupScreen.hidden = false;
+  });
+</script>
+
+</body>
+</html>

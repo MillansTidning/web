@@ -1,14 +1,70 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Millans Tidning</title>
+  <title>Livefakta om Millan – Millans Tidning</title>
 
-<link rel="icon" type="image/png" href="logga.png">
-<link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="logga.png">
+  <link rel="stylesheet" href="style.css">
 
+  <style>
+    #secretNews {
+      display: none;
+    }
+
+    #secretNews.show {
+      display: block;
+      animation: senNyhetIn 0.9s ease;
+    }
+
+    #lastNews {
+      text-align: center;
+      transition: all 0.4s ease;
+    }
+
+    #lastNews.waiting {
+      background: #fff7dc;
+    }
+
+    .news-dot {
+      display: inline-block;
+      animation: blinkDot 1s ease-in-out infinite;
+    }
+
+    .news-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .news-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes senNyhetIn {
+      from {
+        opacity: 0;
+        transform: translateY(45px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes blinkDot {
+      0%, 100% {
+        opacity: 0.25;
+        transform: translateY(0);
+      }
+
+      50% {
+        opacity: 1;
+        transform: translateY(-3px);
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -20,51 +76,79 @@
 
 <nav>
   <div class="overlay"></div>
-  <div class="menu-toggle">☰</div>
 
-   <div class="menu">
+  <div class="menu-toggle" role="button" tabindex="0" aria-label="Öppna meny" aria-expanded="false">
+    ☰
+  </div>
+
+  <div class="menu">
     <a href="home.html">Start</a>
     <a href="nyheter.html">Nyheter</a>
     <a href="livefakta.html">Livefakta om Millan</a>
     <a href="recept.html">Recept</a>
-    <a href="knep.html">Knep & knåp</a>
+    <a href="knep.html">Knep &amp; knåp</a>
     <a href="etidning.html">E-tidning</a>
     <a href="övrigt.html">Övrigt</a>
     <a href="millis-horna.html">Milanos hörna</a>
   </div>
 </nav>
 
-<div class="container">
-
+<main class="container">
 
   <div class="article">
     <h2>📍 Var är Millan just nu?</h2>
-    <p>På sitt födaställe.
+    <p>På sitt födelseställe.</p>
   </div>
 
   <div class="article">
     <h2>😺 Millans senaste äventyr</h2>
+
     <ul>
-      <li>Millan har fyllt år hon gjorde det 21 april.</li>
-      <li>Millan har varit ute väldigt mycket men nu är hon i sitt hus.</li>
-      <li>men man får inte glömma att hon har parat sig. Vi kallar killen för Bosse.</li>
+      <li>Millan har fyllt år. Hon gjorde det den 21 april.</li>
+      <li>Millan har varit ute väldigt mycket, men nu är hon i sitt hus.</li>
+      <li>Man får inte glömma att hon har parat sig. Vi kallar killen för Bosse.</li>
     </ul>
-<img src="äventyr.jpeg" alt="Millan">
+
+    <img src="äventyr.jpeg" alt="Millan på äventyr">
   </div>
 
   <div class="article">
     <h2>😺 Millans humör</h2>
     <p>Idag verkar Millan vara:</p>
-    <p style="font-size: 1.4rem;">💙 Väldigt trött för att hon har födit barn. </p>
+    <p style="font-size: 1.4rem;">💙 Väldigt trött för att hon har fött barn.</p>
   </div>
 
   <div class="article">
     <h2>📸 Dagens bild</h2>
-    <img src="dagensbild.jpeg" alt="Millan">
-    <p>Här är en riktigt fin bild på millans kattungar</p>
+    <img src="dagensbild.jpeg" alt="Millans kattungar">
+    <p>Här är en riktigt fin bild på Millans kattungar.</p>
   </div>
 
-</div>
+  <div class="article" id="lastNews" aria-live="polite">
+    <h2>📰 Dagens nyheter är slut</h2>
+    <p>Det var allt från Millans Tidning idag. Tack för att du läste!</p>
+  </div>
+
+  <div class="article" id="secretNews">
+    <h2>🐾 Vänta – en sen nyhet har kommit in!</h2>
+
+    </h3>Millan kattungar har varit ute ur födargarderoben!</h3>
+
+
+    <p>
+      Precis när vi trodde att dagens rapportering var avslutad kom en ny uppgift in till redaktionen.
+    </p>
+
+    <p>
+      Millan låg med de utanförboet.
+    </p>
+
+    <p>
+      Tyvär har vi ingen bild.
+    </p>
+  </div>
+
+</main>
 
 <footer>
   <p>© Millans Tidning 2026</p>
@@ -74,18 +158,55 @@
   const toggle = document.querySelector(".menu-toggle");
   const menu = document.querySelector(".menu");
 
-  toggle.addEventListener("click", (e) => {
-    e.stopPropagation();
-    menu.classList.toggle("active");
+  function toggleMenu(event) {
+    event.stopPropagation();
+    const isOpen = menu.classList.toggle("active");
+    toggle.setAttribute("aria-expanded", String(isOpen));
+  }
+
+  toggle.addEventListener("click", toggleMenu);
+
+  toggle.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      toggleMenu(event);
+    }
   });
 
-  menu.addEventListener("click", (e) => {
-    e.stopPropagation();
+  menu.addEventListener("click", (event) => {
+    event.stopPropagation();
   });
 
   document.addEventListener("click", () => {
     menu.classList.remove("active");
+    toggle.setAttribute("aria-expanded", "false");
   });
+
+  const lastNews = document.getElementById("lastNews");
+  const secretNews = document.getElementById("secretNews");
+
+  window.setTimeout(() => {
+    lastNews.classList.add("waiting");
+    lastNews.innerHTML = `
+      <h2>⌛ Vänta lite...</h2>
+      <p>
+        Det verkar som att en ny uppgift precis kommit in till redaktionen
+        <span class="news-dot">.</span>
+        <span class="news-dot">.</span>
+        <span class="news-dot">.</span>
+      </p>
+    `;
+  }, 2500);
+
+  window.setTimeout(() => {
+    lastNews.style.display = "none";
+    secretNews.classList.add("show");
+
+    secretNews.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }, 5200);
 </script>
 
 </body>
