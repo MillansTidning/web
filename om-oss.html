@@ -120,7 +120,7 @@ Millans Tidning
 <a href="etidning.html">E-tidning</a>
 <a href="övrigt.html">Övrigt</a>
 <a href="millis-horna.html">Milanos hörna</a>
-<a href="om-oss.html">👥 Om oss</a>
+<a href="om-oss.html">Om oss</a>
 
 </div>
 
@@ -132,12 +132,35 @@ Millans Tidning
 
 <div class="article">
 
+<h2>📰 Redaktionen</h2>
+
+<p>
+
+Om du ska sick in t.ex. serietidningar scika in här!
+
+</p>
+
+<button
+class="contact-btn"
+onclick="openForm('Redaktionen')">
+
+📰 Kontakta redaktionen
+
+</button>
+
+</div>
+
+<div class="article">
+
 <h2>👦 Sigge</h2>
 
 <p><b>Chefredaktör</b></p>
 
 <p>
-Har du frågor, idéer eller vill skicka något till Sigge?
+Namn: Sigge Sjöö<p>
+<p>År: 8<p>
+<p>Intresse: Teknik<p>
+<p>Djur: Millan, Bonnie, Trolle,  Persika, Bosse JR och Bill<p>
 </p>
 
 <button
@@ -152,26 +175,50 @@ onclick="openForm('Chefredaktör Sigge')">
 
 <div class="article">
 
-<h2>📰 Redaktionen</h2>
+<h2>😸 Millan</h2>
+
+<p><b>Chefredaktör</b></p>
 
 <p>
+Namn: Millan Sjöö<p>
+<p>År: 1<p>
+<p>Intresse: Leka<p>
+<p>Djur: Bonnie, Trolle,  Persika, Bosse JR och Bill<p>
+</p>
+</div>
 
-Har du synpunkter eller vill skicka material till
-redaktionen?
+<div class="article">
 
+<h2>👱🏼‍♂️ Tomas</h2>
+
+<p><b>IT</b></p>
+
+<p>
+Namn: Tomas Moberg<p>
+<p>År: 42<p>
+<p>Intresse: Sport<p>
+<p>Djur: Millan, Bonnie, Trolle,  Persika, Bosse JR och Bill<p>
 </p>
 
-<button
-class="contact-btn"
-onclick="openForm('Redaktionen')">
+</div>
 
-📰 Kontakta redaktionen
+<div class="article">
 
-</button>
+<h2>👩🏼 Kristin</h2>
+
+<p><b>HR chef</b></p>
+
+<p>
+Namn: Kristin Sjöö<p>
+<p>År: 42<p>
+<p>Intresse: Promenera<p>
+<p>Djur: Millan, Bonnie, Trolle,  Persika, Bosse JR och Bill<p>
+</p>
 
 </div>
 
 </div>
+
 
 <div
 class="article hidden"
@@ -226,20 +273,18 @@ required>
 
 </div>
 
-<div class="form-grupp">
+<div class="form-grupp" id="categoryGroup">
 
 <label>Kategori</label>
 
 <select
+id="category"
 name="Kategori"
 required>
 
 <option value="">Välj kategori</option>
-
 <option>📖 Serietidning</option>
-
 <option>❓ Svar på fråga</option>
-
 <option>💬 Övrigt</option>
 
 </select>
@@ -372,12 +417,27 @@ document.addEventListener("click",()=>{
 const receiver=document.getElementById("receiver");
 const recipientField=document.getElementById("recipientField");
 const formArticle=document.getElementById("formArticle");
+const categoryGroup=document.getElementById("categoryGroup");
+const category=document.getElementById("category");
 
 function openForm(person){
 
     receiver.textContent="📬 Kontakta: "+person;
 
     recipientField.value=person;
+
+    if(person==="Chefredaktör Sigge"){
+
+        categoryGroup.classList.add("hidden");
+        category.required=false;
+        category.value="";
+
+    }else{
+
+        categoryGroup.classList.remove("hidden");
+        category.required=true;
+
+    }
 
     formArticle.classList.remove("hidden");
 
@@ -496,9 +556,7 @@ if(response.ok){
     console.error("Fel:", error);
 
     alert(
-        "Webbläsaren kunde inte ansluta till FormSubmit.\n\n" +
-        "Om du kör sidan direkt från datorn (file://) är detta normalt.\n" +
-        "Testa istället via GitHub Pages eller en lokal webbserver."
+        "Medelandet kunde inte skickas. 1.Konntrolera internetanslutningen. 2. Kontrolera att filen är mindre än 10MB (om du har en fil). Annara mejla ett fel medelande till millanstidning@gmail.com"
     );
 
 }
