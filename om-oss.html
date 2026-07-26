@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Om oss - Millans Tidning</title>
+
+<link rel="icon" href="logga.png">
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.contact-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:24px;
+}
+
+.contact-btn{
+
+    background:linear-gradient(#8ecf8e,#68b968);
+    border:3px solid #2f2418;
+    border-radius:30px;
+    padding:14px 22px;
+    font:bold 1rem inherit;
+    cursor:pointer;
+    transition:.25s;
+    box-shadow:6px 6px 0 rgba(47,36,24,.18);
+
+}
+
+.contact-btn:hover{
+
+    background:#ffe28a;
+    transform:translateY(-2px);
+
+}
+
+.hidden{
+    display:none;
+}
+
+.form-grupp{
+    margin-bottom:18px;
+}
+
+.form-grupp label{
+
+    display:block;
+    margin-bottom:6px;
+    font-weight:bold;
+
+}
+
+.form-grupp input,
+.form-grupp textarea,
+.form-grupp select{
+
+    width:100%;
+    padding:12px;
+    border-radius:18px;
+    border:2px solid #2f2418;
+    box-sizing:border-box;
+    font:inherit;
+
+}
+
+.form-buttons{
+
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+
+}
+
+#fileName{
+
+    font-weight:bold;
+    color:#2e7d32;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>
+
+<img src="logga.png" class="logo">
+
+Millans Tidning
+
+</h1>
+
+<p>En tidning för Sigges släkt</p>
+
+</header>
+
+<nav>
+
+<div class="overlay"></div>
+
+<div class="menu-toggle">☰</div>
+
+<div class="menu">
+
+<a href="home.html">Start</a>
+<a href="nyheter.html">Nyheter</a>
+<a href="livefakta.html">Livefakta om Millan</a>
+<a href="recept.html">Recept</a>
+<a href="knep.html">Knep & knåp</a>
+<a href="etidning.html">E-tidning</a>
+<a href="övrigt.html">Övrigt</a>
+<a href="millis-horna.html">Milanos hörna</a>
+<a href="om-oss.html">👥 Om oss</a>
+
+</div>
+
+</nav>
+
+<div class="container">
+
+<div class="contact-grid">
+
+<div class="article">
+
+<h2>👦 Sigge</h2>
+
+<p><b>Chefredaktör</b></p>
+
+<p>
+Har du frågor, idéer eller vill skicka något till Sigge?
+</p>
+
+<button
+class="contact-btn"
+onclick="openForm('Chefredaktör Sigge')">
+
+✉️ Kontakta Sigge
+
+</button>
+
+</div>
+
+<div class="article">
+
+<h2>📰 Redaktionen</h2>
+
+<p>
+
+Har du synpunkter eller vill skicka material till
+redaktionen?
+
+</p>
+
+<button
+class="contact-btn"
+onclick="openForm('Redaktionen')">
+
+📰 Kontakta redaktionen
+
+</button>
+
+</div>
+
+</div>
+
+<div
+class="article hidden"
+id="formArticle">
+
+<h2 id="receiver"></h2>
+
+<form
+
+id="contactForm"
+
+action="https://formsubmit.co/millanstidning@gmail.com"
+
+method="POST"
+
+enctype="multipart/form-data">
+
+<input
+type="hidden"
+name="_captcha"
+value="false">
+
+<input
+type="hidden"
+name="_subject"
+value="Nytt meddelande från Millans Tidning">
+
+<input
+type="hidden"
+id="recipientField"
+name="Mottagare">
+
+<div class="form-grupp">
+
+<label>Namn</label>
+
+<input
+type="text"
+name="Namn"
+required>
+
+</div>
+
+<div class="form-grupp">
+
+<label>E-postadress</label>
+
+<input
+type="email"
+name="E-post"
+required>
+
+</div>
+
+<div class="form-grupp">
+
+<label>Kategori</label>
+
+<select
+name="Kategori"
+required>
+
+<option value="">Välj kategori</option>
+
+<option>📖 Serietidning</option>
+
+<option>❓ Svar på fråga</option>
+
+<option>💬 Övrigt</option>
+
+</select>
+
+</div>
+
+<div class="form-grupp">
+
+<label>Meddelande</label>
+
+<textarea
+
+name="Meddelande"
+
+rows="8"
+
+required>
+
+</textarea>
+
+</div>
+
+<input
+
+id="realFile"
+
+type="file"
+
+name="attachment"
+
+accept=".pdf,.jpg,.jpeg,.png,.gif,.doc,.docx"
+
+hidden>
+
+<div class="form-buttons">
+
+<button
+
+type="button"
+
+id="fileButton"
+
+class="pdf-button cat">
+
+📎 Välj fil
+
+</button>
+
+<span id="fileName"></span>
+
+<button
+
+type="button"
+
+id="removeFile"
+
+class="pdf-button cat hidden">
+
+❌ Ta bort fil
+
+</button>
+
+<button
+
+type="submit"
+
+class="pdf-button cat">
+
+📤 Skicka
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+<div
+id="thanks"
+class="article hidden"
+style="text-align:center;">
+
+<h2>✅ Tack för ditt meddelande!</h2>
+
+<p>
+
+Vi har tagit emot ditt meddelande och återkommer så snart vi kan.
+
+</p>
+
+</div>
+
+</div>
+
+<footer>
+
+<p>© Millans Tidning 2026</p>
+
+</footer>
+
+<script>
+
+/* ===========================
+   Mobilmeny
+=========================== */
+
+const toggle=document.querySelector(".menu-toggle");
+const menu=document.querySelector(".menu");
+
+toggle.onclick=(e)=>{
+
+    e.stopPropagation();
+    menu.classList.toggle("active");
+
+};
+
+menu.onclick=(e)=>e.stopPropagation();
+
+document.addEventListener("click",()=>{
+
+    menu.classList.remove("active");
+
+});
+
+/* ===========================
+   Öppna formulär
+=========================== */
+
+const receiver=document.getElementById("receiver");
+const recipientField=document.getElementById("recipientField");
+const formArticle=document.getElementById("formArticle");
+
+function openForm(person){
+
+    receiver.textContent="📬 Kontakta: "+person;
+
+    recipientField.value=person;
+
+    formArticle.classList.remove("hidden");
+
+    formArticle.scrollIntoView({
+
+        behavior:"smooth"
+
+    });
+
+}
+
+/* ===========================
+   Filhantering
+=========================== */
+
+const realFile=document.getElementById("realFile");
+const fileButton=document.getElementById("fileButton");
+const removeFile=document.getElementById("removeFile");
+const fileName=document.getElementById("fileName");
+
+fileButton.addEventListener("click",()=>{
+
+    realFile.click();
+
+});
+
+realFile.addEventListener("change",()=>{
+
+    if(realFile.files.length){
+
+        fileName.textContent="📎 "+realFile.files[0].name;
+
+        removeFile.classList.remove("hidden");
+
+    }else{
+
+        fileName.textContent="";
+
+        removeFile.classList.add("hidden");
+
+    }
+
+});
+
+removeFile.addEventListener("click",()=>{
+
+    realFile.value="";
+
+    fileName.textContent="";
+
+    removeFile.classList.add("hidden");
+
+});
+
+/* ===========================
+   Skicka formulär
+=========================== */
+
+const contactForm=document.getElementById("contactForm");
+const thanks=document.getElementById("thanks");
+
+contactForm.addEventListener("submit",async(e)=>{
+
+    e.preventDefault();
+
+    const formData=new FormData(contactForm);
+
+    try{
+
+        const response=await fetch(contactForm.action,{
+
+            method:"POST",
+
+            body:formData,
+
+            headers:{
+
+                Accept:"application/json"
+
+            }
+
+        });
+
+if(response.ok){
+
+    formArticle.classList.add("hidden");
+
+    thanks.classList.remove("hidden");
+
+    contactForm.reset();
+
+    fileName.textContent="";
+
+    removeFile.classList.add("hidden");
+
+    window.scrollTo({
+
+        top:thanks.offsetTop-30,
+
+        behavior:"smooth"
+
+    });
+
+}else{
+
+    const text = await response.text();
+
+    console.error(text);
+
+    alert("Formuläret kunde inte skickas.");
+
+        }
+
+    }catch(error){
+
+    console.error("Fel:", error);
+
+    alert(
+        "Webbläsaren kunde inte ansluta till FormSubmit.\n\n" +
+        "Om du kör sidan direkt från datorn (file://) är detta normalt.\n" +
+        "Testa istället via GitHub Pages eller en lokal webbserver."
+    );
+
+}
+
+});
+
+</script>
+
+</body>
+
+</html>
