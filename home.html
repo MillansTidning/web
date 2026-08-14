@@ -8,6 +8,7 @@
 
 <link rel="icon" type="image/png" href="logga.png">
 <link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
 
 </head>
 
@@ -87,27 +88,36 @@
 
 </div>
 
-<footer>
-  <p>© Millans Tidning 2026</p>
-</footer>
-
-<script>
-  const toggle = document.querySelector(".menu-toggle");
-  const menu = document.querySelector(".menu");
-
-  toggle.addEventListener("click", (e) => {
-    e.stopPropagation();
-    menu.classList.toggle("active");
-  });
-
-  menu.addEventListener("click", (e) => {
-    e.stopPropagation();
-  });
-
-  document.addEventListener("click", () => {
-    menu.classList.remove("active");
-  });
+<footer> 
+  <p>© Millans Tidning 2026</p> 
+</footer> 
+ 
+<script> 
+  const toggle = document.querySelector(".menu-toggle"); 
+  const menu = document.querySelector(".menu"); 
+ 
+  toggle.addEventListener("click", (e) => { 
+    e.stopPropagation(); 
+    menu.classList.toggle("active"); 
+  }); 
+ 
+  menu.addEventListener("click", (e) => { 
+    e.stopPropagation(); 
+  }); 
+ 
+  document.addEventListener("click", () => { 
+    menu.classList.remove("active"); 
+  }); 
 </script>
 
-</body>
+<!-- Service worker för Millans Tidning -->
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/web/service-worker.js");
+  });
+}
+</script>
+ 
+</body> 
 </html>
