@@ -349,3 +349,111 @@ footer {
 }
 
 /* Popup och FormSubmit kommer byggas ut i nästa version */
+
+
+/* ===========================
+   🏆 MILLANS MÄSTERSKAP
+   =========================== */
+
+.masterskap {
+  text-align: center;
+}
+
+.masterskap-intro {
+  font-size: 1.15rem;
+  font-weight: bold;
+}
+
+.stallning-rubrik {
+  color: #3c7a3c;
+  font-size: 1.6rem;
+  margin: 30px 0 20px;
+}
+
+.podium {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 14px;
+  max-width: 700px;
+  margin: 0 auto 28px;
+}
+
+.podium-place {
+  flex: 1;
+  padding: 18px 10px 0;
+  border: 3px solid #2f2418;
+  border-bottom: 0;
+  border-radius: 24px 24px 0 0;
+  box-shadow: 6px 6px 0 rgba(47,36,24,0.15);
+}
+
+.podium-place h3 {
+  margin: 8px 0 4px;
+  font-size: 1.35rem;
+}
+
+.podium-place p {
+  margin: 0 0 15px;
+  font-weight: bold;
+}
+
+.medal {
+  font-size: 42px;
+}
+
+.podium-number {
+  padding: 12px;
+  font-size: 2.4rem;
+  font-weight: bold;
+  background: rgba(255,255,255,0.55);
+  border-radius: 16px 16px 0 0;
+}
+
+.podium-place.first {
+  min-height: 230px;
+  background: #ffe28a;
+}
+
+.podium-place.second {
+  min-height: 195px;
+  background: #e7e7e7;
+}
+
+.podium-place.third {
+  min-height: 175px;
+  background: #ffb86b;
+}
+
+.masterskap-info {
+  max-width: 650px;
+  margin: 25px auto 5px;
+  padding: 18px;
+  border: 3px solid #2f2418;
+  border-radius: 22px;
+  background: #fff7dc;
+  font-weight: bold;
+  line-height: 1.8;
+}
+
+@media (max-width: 600px) {
+  .podium {
+    gap: 7px;
+  }
+
+  .podium-place {
+    padding: 14px 5px 0;
+  }
+
+  .podium-place h3 {
+    font-size: 1.05rem;
+  }
+
+  .medal {
+    font-size: 32px;
+  }
+
+  .podium-number {
+    font-size: 2rem;
+  }
+}

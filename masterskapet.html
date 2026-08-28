@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Millans Tidning</title>
+
+<link rel="icon" type="image/png" href="logga.png">
+  <link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+<header>
+  <h1>🏆 Millans Mästerskap</h1>
+  <p>Följ Millans mästerskap här!</p>
+</header>
+<nav>
+  <div class="overlay"></div>
+  <div class="menu-toggle">☰</div>
+
+  <div class="menu">
+    <a href="home.html">Start</a>
+    <a href="nyheter.html">Nyheter</a>
+    <a href="livefakta.html">Livefakta om Millan</a>
+    <a href="recept.html">Recept</a>
+    <a href="knep.html">Knep & knåp</a>
+    <a href="etidning.html">E-tidning</a>
+    <a href="övrigt.html">Övrigt</a>
+    <a href="millis-horna.html">Milanos hörna</a>
+    <a href="om-oss.html">Om oss</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="article masterskap">
+
+    <h2>🏆 Millans Mästerskap</h2>
+
+    <p class="masterskap-intro">
+      Följ Millans mästerskap här!
+    </p>
+
+    <h3 class="stallning-rubrik">Aktuell ställning</h3>
+
+    <div class="podium">
+
+      <div class="podium-place second">
+        <div class="medal">🥈</div>
+        <h3>Mats</h3>
+        <p>11 poäng</p>
+        <div class="podium-number">2</div>
+      </div>
+
+      <div class="podium-place first">
+        <div class="medal">🥇</div>
+        <h3>Sam</h3>
+        <p>12 poäng</p>
+        <div class="podium-number">1</div>
+      </div>
+
+      <div class="podium-place third">
+        <div class="medal">🥉</div>
+        <h3>Tomas</h3>
+        <p>10 poäng</p>
+        <div class="podium-number">3</div>
+      </div>
+
+    </div>
+
+    <div class="masterskap-info">
+      👥 <strong>1 deltagare</strong> har ännu inte tävlat!
+      <br>
+      🔥 Ställningen kan fortfarande förändras!
+    </div>
+
+  </div>
+
+</div><footer>
+  <p>© Millans Tidning 2026</p>
+</footer>
+
+<script>
+  const toggle = document.querySelector(".menu-toggle");
+  const menu = document.querySelector(".menu");
+
+  toggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    menu.classList.toggle("active");
+  });
+
+  menu.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+
+  document.addEventListener("click", () => {
+    menu.classList.remove("active");
+  });
+</script>
+
+</body>
+</html>
+```
