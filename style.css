@@ -457,3 +457,70 @@ footer {
     font-size: 2rem;
   }
 }
+/* 🏆 MILLANS MÄSTERSKAP */
+
+.masterskap {
+  text-align: center;
+}
+
+.masterskap-intro {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.nedrakningsklocka {
+  margin: 25px auto;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2f2418;
+  text-align: center;
+}.vinnarsida {
+  text-align: center;
+}
+
+.vinnarnamn {
+  font-size: 3.5rem;
+  font-weight: bold;
+}
+
+.vinnartext {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #3c7a3c;
+  letter-spacing: 5px;
+}
+
+.konfetti {
+  font-size: 2rem;
+  margin: 20px 0;
+}
+
+.vinnare {
+  background: #fff7dc;
+  border: 4px solid #2f2418;
+  border-radius: 30px;
+  padding: 35px 20px;
+  box-shadow: 10px 10px 0 rgba(47,36,24,0.18);
+  max-width: 600px;
+  margin: 0 auto 30px;
+}
+
+.vinnarpoang {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+.övriga-resultat {
+  max-width: 500px;
+  margin: auto;
+  background: white;
+  border: 3px solid #2f2418;
+  border-radius: 25px;
+  padding: 15px;
+}
+
+.grattis {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
