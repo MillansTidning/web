@@ -10,6 +10,275 @@
 <link rel="stylesheet" href="style.css">
 <link rel="manifest" href="manifest.json">
 
+
+<style>
+/* MT:s Valkompass */
+.valkompass-ruta{
+  position:relative;
+  text-align:center;
+  margin-top:24px;
+}
+.valkompass-box{
+  max-width:760px;
+  margin:0 auto;
+  padding:24px;
+  border:3px solid #2f2418;
+  border-radius:24px;
+  background:#fff;
+  box-shadow:6px 6px 0 rgba(47,36,24,.12);
+}
+.valkompass-box h2{
+  margin-top:0;
+}
+.valkompass-fullscreen{
+  position:absolute;
+  top:18px;
+  right:18px;
+  border:3px solid #2f2418;
+  border-radius:16px;
+  background:#8ecf8e;
+  padding:8px 12px;
+  font-size:1rem;
+  cursor:pointer;
+}
+.valkompass-fullscreen:hover{
+  background:#ffe28a;
+}
+.valkompass-start{
+  border:3px solid #2f2418;
+  border-radius:20px;
+  background:#8ecf8e;
+  padding:12px 22px;
+  font-weight:bold;
+  font-size:1rem;
+  cursor:pointer;
+}
+.valkompass-start:hover{
+  background:#ffe28a;
+}
+#valkompassScreen{
+  display:none;
+}
+.valkompass-progress{
+  font-weight:bold;
+  margin-bottom:18px;
+}
+.valkompass-question{
+  font-size:1.25rem;
+  font-weight:bold;
+  margin:20px auto;
+  max-width:650px;
+}
+.valkompass-answers{
+  display:grid;
+  gap:10px;
+  max-width:600px;
+  margin:0 auto;
+}
+.valkompass-answer{
+  border:3px solid #2f2418;
+  border-radius:18px;
+  background:#fff;
+  padding:12px;
+  font:inherit;
+  cursor:pointer;
+}
+.valkompass-answer:hover{
+  background:#ffe28a;
+}
+.valkompass-close{
+  margin-top:18px;
+  border:2px solid #2f2418;
+  border-radius:16px;
+  background:#eee;
+  padding:8px 14px;
+  cursor:pointer;
+}
+
+.valkompass-result{margin:20px auto 0;max-width:620px;padding:20px;border:3px solid #2f2418;border-radius:20px;background:#fff;text-align:center}
+.valkompass-result-title{font-size:1.15rem;font-weight:bold}
+.valkompass-result-party{font-size:1.8rem;font-weight:bold;margin:5px 0}
+.valkompass-result-percent{font-size:1.3rem;margin-bottom:16px}
+.valkompass-result-list{display:grid;gap:7px;text-align:left}
+.valkompass-result-row{display:flex;justify-content:space-between;gap:10px;padding:9px 12px;border:2px solid #2f2418;border-radius:12px;background:#f7f7f7}
+.valkompass-result-row:first-child{background:#d8c3a5}
+.valkompass-result-note{font-size:.85rem;margin-bottom:0}
+</style>
+
+
+<style>
+/* ===========================
+   MT Spin the Wheel
+=========================== */
+.spin-ruta{margin-top:24px}
+.spin-box{
+  max-width:900px;
+  margin:0 auto;
+  padding:24px;
+  border:3px solid #2f2418;
+  border-radius:24px;
+  background:#fff;
+  box-shadow:6px 6px 0 rgba(47,36,24,.12);
+  text-align:center;
+}
+.spin-controls{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+  align-items:center;
+  margin:18px auto;
+}
+.spin-input{
+  padding:11px 14px;
+  border:2px solid #2f2418;
+  border-radius:16px;
+  font:inherit;
+  min-width:220px;
+}
+.spin-button{
+  border:3px solid #2f2418;
+  border-radius:18px;
+  background:#fff;
+  padding:10px 16px;
+  font:inherit;
+  font-weight:bold;
+  cursor:pointer;
+}
+.spin-button:hover{background:#ffe28a}
+.spin-items{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin:15px auto 25px;
+  max-width:760px;
+}
+.spin-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  border:2px solid #2f2418;
+  border-radius:14px;
+  padding:7px 10px;
+  background:#f7f7f7;
+}
+.spin-item button{
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  font-size:1rem;
+}
+.spin-wheel-area{
+  position:relative;
+  width:min(80vw,520px);
+  margin:10px auto 20px;
+}
+#spinCanvas{
+  display:block;
+  width:100%;
+  height:auto;
+}
+.spin-pointer{
+  position:absolute;
+  top:-4px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:34px;
+  z-index:2;
+}
+.spin-go{
+  background:#8ecf8e;
+  font-size:1.2rem;
+  padding:13px 28px;
+}
+.spin-go:hover{background:#ffe28a}
+.spin-result{
+  margin:18px auto 0;
+  padding:14px;
+  border:3px solid #2f2418;
+  border-radius:18px;
+  background:#fff4c7;
+  font-size:1.2rem;
+  font-weight:bold;
+  max-width:600px;
+}
+.spin-category{
+  padding:10px 14px;
+  border:2px solid #2f2418;
+  border-radius:16px;
+  font:inherit;
+  background:#fff;
+}
+@media(max-width:600px){
+  .spin-box{padding:14px}
+  .spin-input{min-width:180px;width:80%}
+}
+
+/* Vinnarruta mitt på hjulet */
+.spin-winner-overlay{
+  display:none;
+  position:absolute;
+  inset:0;
+  align-items:center;
+  justify-content:center;
+  z-index:10;
+}
+.spin-winner-card{
+  position:relative;
+  width:min(82%,380px);
+  padding:18px;
+  border:4px solid #2f2418;
+  border-radius:20px;
+  background:#fff;
+  text-align:center;
+  box-shadow:6px 6px 0 rgba(47,36,24,.18);
+  overflow:hidden;
+}
+.spin-winner-card h3{
+  margin:0 0 6px;
+  font-size:1.3rem;
+}
+.spin-winner-name{
+  font-size:1.6rem;
+  font-weight:bold;
+  margin:6px 0 14px;
+}
+.spin-winner-actions{
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  flex-wrap:wrap;
+  position:relative;
+  z-index:2;
+}
+.spin-continue{
+  background:#fff;
+}
+.spin-remove-winner{
+  background:#8ecf8e;
+}
+.spin-remove-winner:hover{
+  background:#68b968;
+}
+.spin-confetti{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+.confetti-piece{
+  position:absolute;
+  top:-20px;
+  width:8px;
+  height:14px;
+  animation:spinConfettiFall 1.7s linear forwards;
+}
+@keyframes spinConfettiFall{
+  from{transform:translateY(0) rotate(0deg)}
+  to{transform:translateY(330px) rotate(720deg)}
+}
+</style>
+
 </head>
 
 <body>
@@ -44,6 +313,78 @@
     <li><a href="spel1.html">Spel 1: Lek med Millan</a></li>
     <li><a href="spel2.html">Spel 2: Kurragömma med Millan</a></li>
   </ul>
+</div>
+
+
+
+<div class="article spin-ruta">
+  <div class="spin-box">
+    <h2>🎡 Spin the Wheel</h2>
+    <p>Välj en kategori eller skriv egna ord.</p>
+
+    <div class="spin-controls">
+      <select id="spinCategory" class="spin-category">
+        <option value="">Välj kategori</option>
+        <option value="katter">🐱 Katter</option>
+        <option value="farger">🎨 Färger</option>
+      </select>
+
+      <input id="spinInput" class="spin-input" type="text" placeholder="Skriv ett eget ord">
+      <button id="spinAdd" class="spin-button" type="button">＋ Lägg till</button>
+      <button id="spinClear" class="spin-button" type="button">🗑️ Rensa</button>
+    </div>
+
+    <div id="spinItems" class="spin-items"></div>
+
+    <div class="spin-wheel-area">
+      <div class="spin-pointer">▼</div>
+      <canvas id="spinCanvas" width="520" height="520"></canvas>
+
+      <div class="spin-winner-overlay" id="spinWinnerOverlay">
+        <div class="spin-winner-card">
+          <div class="spin-confetti" id="spinConfetti"></div>
+          <h3>🎉 Vinnare!</h3>
+          <div class="spin-winner-name" id="spinWinnerName"></div>
+          <div class="spin-winner-actions">
+            <button class="spin-button spin-continue" id="spinContinue" type="button">Fortsätt</button>
+            <button class="spin-button spin-remove-winner" id="spinRemoveWinner" type="button">Fortsätt och ta bort denna vinnare</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button id="spinGo" class="spin-button spin-go" type="button">🎡 SPIN!</button>
+
+    <div id="spinResult" class="spin-result">Lägg till minst två ord för att snurra hjulet.</div>
+  </div>
+</div>
+
+<div class="article valkompass-ruta">
+  <div class="valkompass-box">
+    <button class="valkompass-fullscreen" id="valkompassFullscreen" type="button">⛶ Helskärm</button>
+
+    <h2>🗳️ MT:s Valkompass</h2>
+    <p>En seriös valkompass med viktiga politiska frågor.</p>
+
+    <div id="valkompassStart">
+      <p>Här kommer du att få ta ställning till politiska sakfrågor.</p>
+      <button class="valkompass-start" id="startValkompass" type="button">Börja valkompassen</button>
+    </div>
+
+    <div id="valkompassScreen">
+      <div class="valkompass-progress" id="valkompassProgress"></div>
+      <div class="valkompass-question" id="valkompassQuestion"></div>
+      <div class="valkompass-answers">
+        <button class="valkompass-answer" type="button">Håller helt med</button>
+        <button class="valkompass-answer" type="button">Håller delvis med</button>
+        <button class="valkompass-answer" type="button">Varken eller</button>
+        <button class="valkompass-answer" type="button">Håller delvis inte med</button>
+        <button class="valkompass-answer" type="button">Håller inte alls med</button>
+      </div>
+      <div id="valkompassResult" class="valkompass-result" style="display:none"></div>
+      <button class="valkompass-close" id="closeValkompass" type="button">← Tillbaka</button>
+    </div>
+  </div>
 </div>
 
 <div class="article">
@@ -89,6 +430,405 @@
   document.addEventListener("click", () => {
     menu.classList.remove("active");
   });
+
+/* MT:s Valkompass – grundfunktion */
+const valkompassQuestions = [
+  "Skatten på höga inkomster bör höjas.",
+  "Skatten på arbete bör sänkas.",
+  "Staten bör ta över ett större ansvar för sjukvården.",
+  "Vinstdrivande aktiebolag bör inte få driva skolor.",
+  "Sverige bör bygga ut kärnkraften.",
+  "Sverige bör bygga ut vindkraften kraftigt.",
+  "Sverige bör ha mer ambitiösa klimatmål än övriga EU.",
+  "Staten bör investera mer pengar i gröna industriprojekt.",
+  "Skatten på bensin och diesel bör sänkas.",
+  "Försäljningen av nya bensin- och dieselbilar bör begränsas.",
+  "Sverige bör ta emot färre asylsökande.",
+  "Permanent uppehållstillstånd bör ersättas av tillfälliga som huvudregel.",
+  "Det bör ställas högre krav på språkkunskaper för permanent uppehållstillstånd.",
+  "Grova våldsbrott bör leda till längre fängelsestraff.",
+  "Barn från 13 år som begår grova brott ska kunna dömas till fängelse.",
+  "Polisen bör få större möjligheter till övervakning för att bekämpa grov kriminalitet.",
+  "Sverige bör lägga mer pengar på förebyggande insatser mot ungdomskriminalitet.",
+  "Sverige bör fortsätta vara medlem i Nato.",
+  "Sverige bör öka sina försvarsutgifter.",
+  "Sverige bör införa euron som valuta.",
+  "Sverige bör samarbeta mer med EU.",
+  "Det internationella biståndet bör öka.",
+  "Marknadshyror bör införas på nya hyresrätter.",
+  "Staten bör ge ekonomiskt stöd till byggandet av fler billiga hyresrätter.",
+  "Föräldrar bör själva få bestämma hur föräldraledigheten delas.",
+  "Pappamånaderna i föräldraförsäkringen bör tas bort.",
+  "Lagstiftning bör införas för kortare veckoarbetstid.",
+  "Pensionsåldern bör inte höjas.",
+  "Public service bör ha ett smalare uppdrag och mindre resurser.",
+  "Det offentliga stödet till kulturverksamheter bör minska."
+];
+const valkompassPartyNames=["Socialdemokraterna", "Sverigedemokraterna", "Moderaterna", "Vänsterpartiet", "Centerpartiet", "Kristdemokraterna", "Miljöpartiet", "Liberalerna"];
+const valkompassPartyScores=[[2, 4, 5, 1, 2, 3, 2, 4], [4, 2, 1, 5, 4, 3, 4, 5], [2, 4, 2, 1, 2, 5, 1, 2], [2, 1, 1, 1, 2, 1, 1, 1], [2, 1, 1, 1, 2, 3, 1, 2], [2, 4, 5, 4, 2, 1, 4, 2], [2, 5, 5, 4, 2, 1, 3, 2], [1, 5, 2, 1, 2, 1, 2, 1], [3, 1, 1, 5, 3, 4, 1, 5], [2, 5, 5, 2, 3, 1, 4, 2], [2, 1, 1, 5, 2, 4, 2, 2], [2, 1, 1, 5, 2, 4, 3, 2], [2, 1, 2, 4, 2, 3, 2, 2], [2, 1, 2, 4, 2, 3, 1, 2], [2, 1, 2, 5, 2, 5, 4, 2], [2, 1, 2, 4, 2, 3, 1, 2], [1, 2, 2, 1, 1, 2, 2, 1], [1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1], [4, 5, 5, 4, 5, 1, 4, 2], [1, 2, 2, 2, 1, 1, 2, 1], [1, 5, 4, 1, 2, 1, 4, 2], [4, 5, 1, 5, 4, 3, 2, 4], [1, 5, 2, 1, 2, 1, 2, 2], [3, 1, 1, 2, 2, 2, 1, 2], [3, 1, 1, 3, 2, 2, 1, 2], [1, 5, 3, 1, 2, 1, 4, 1], [2, 1, 1, 3, 2, 3, 1, 2], [4, 1, 1, 5, 4, 3, 2, 5], [3, 1, 2, 4, 3, 5, 2, 3]];
+let valkompassAnswersGiven=[];
+
+
+let valkompassQuestionIndex = 0;
+valkompassAnswersGiven=[];
+
+const valkompassStart = document.getElementById("valkompassStart");
+const valkompassScreen = document.getElementById("valkompassScreen");
+const valkompassProgress = document.getElementById("valkompassProgress");
+const valkompassQuestion = document.getElementById("valkompassQuestion");
+const startValkompass = document.getElementById("startValkompass");
+const closeValkompass = document.getElementById("closeValkompass");
+const valkompassFullscreen = document.getElementById("valkompassFullscreen");
+const valkompassBox = document.querySelector(".valkompass-box");
+const valkompassAnswers = document.querySelectorAll(".valkompass-answer");
+
+function showValkompassQuestion(){
+  valkompassProgress.textContent =
+    `Fråga ${valkompassQuestionIndex + 1} av ${valkompassQuestions.length}`;
+
+  valkompassQuestion.textContent =
+    valkompassQuestions[valkompassQuestionIndex];
+}
+
+startValkompass.addEventListener("click",()=>{
+  valkompassStart.style.display="none";
+  valkompassScreen.style.display="block";
+  valkompassQuestionIndex=0;
+  valkompassAnswersGiven=[];
+  document.getElementById("valkompassResult").style.display="none";
+  document.querySelector(".valkompass-answers").style.display="grid";
+  showValkompassQuestion();
+});
+
+valkompassAnswers.forEach((button,answerIndex)=>{
+  button.addEventListener("click",()=>{
+    valkompassAnswersGiven[valkompassQuestionIndex]=answerIndex+1;
+
+    if(valkompassQuestionIndex < valkompassQuestions.length - 1){
+      valkompassQuestionIndex++;
+      showValkompassQuestion();
+    }else{
+      showValkompassResult();
+    }
+  });
+});
+
+function showValkompassResult(){
+  const totals=valkompassPartyNames.map((name,partyIndex)=>{
+    let distance=0;
+    for(let q=0;q<valkompassQuestions.length;q++){
+      distance += Math.abs(valkompassAnswersGiven[q]-valkompassPartyScores[q][partyIndex]);
+    }
+    return {name, distance};
+  });
+
+  const best=Math.min(...totals.map(x=>x.distance));
+  const percentages=totals.map(x=>{
+    const pct=Math.max(0,Math.round(100-(x.distance/best-1)*18));
+    return {...x,pct};
+  }).sort((a,b)=>b.distance===a.distance ? b.pct-a.pct : a.distance-b.distance);
+
+  const resultBox=document.getElementById("valkompassResult");
+  const top=percentages[0];
+
+  valkompassProgress.textContent="Valkompassen är klar!";
+  valkompassQuestion.textContent="";
+  document.querySelector(".valkompass-answers").style.display="none";
+
+  resultBox.innerHTML=
+    '<div class="valkompass-result-title">Du är mest lik</div>'+
+    '<div class="valkompass-result-party">'+top.name+'</div>'+
+    '<div class="valkompass-result-percent">'+top.pct+' % match</div>'+
+    '<div class="valkompass-result-list">'+
+    percentages.map((x,i)=>'<div class="valkompass-result-row"><span>'+ (i+1)+'. '+x.name+'</span><strong>'+x.pct+' %</strong></div>').join('')+
+    '</div>'+
+    '<p class="valkompass-result-note">Resultatet är en förenklad MT-valkompass och är inte ett officiellt partitest.</p>';
+  resultBox.style.display="block";
+}
+
+closeValkompass.addEventListener("click",()=>{
+  valkompassScreen.style.display="none";
+  valkompassStart.style.display="block";
+  document.querySelector(".valkompass-answers").style.display="grid";
+});
+
+valkompassFullscreen.addEventListener("click",async()=>{
+  try{
+    if(!document.fullscreenElement){
+      await valkompassBox.requestFullscreen();
+    }else{
+      await document.exitFullscreen();
+    }
+  }catch(error){
+    console.log("Helskärm kunde inte startas.",error);
+  }
+});
+
+document.addEventListener("fullscreenchange",()=>{
+  valkompassFullscreen.textContent =
+    document.fullscreenElement ? "✕ Avsluta helskärm" : "⛶ Helskärm";
+});
+
+
+/* ===========================
+   MT Spin the Wheel
+=========================== */
+
+const spinCanvas=document.getElementById("spinCanvas");
+const spinCtx=spinCanvas.getContext("2d");
+const spinInput=document.getElementById("spinInput");
+const spinAdd=document.getElementById("spinAdd");
+const spinClear=document.getElementById("spinClear");
+const spinItems=document.getElementById("spinItems");
+const spinGo=document.getElementById("spinGo");
+const spinResult=document.getElementById("spinResult");
+const spinCategory=document.getElementById("spinCategory");
+
+const spinWinnerOverlay=document.getElementById("spinWinnerOverlay");
+const spinWinnerName=document.getElementById("spinWinnerName");
+const spinContinue=document.getElementById("spinContinue");
+const spinRemoveWinner=document.getElementById("spinRemoveWinner");
+const spinConfetti=document.getElementById("spinConfetti");
+
+let spinWords=[];
+let spinAngle=0;
+let spinning=false;
+let currentWinnerIndex=-1;
+
+const spinColors=["#808080","#d8c3a5","#ffffff","#111111","#e87524"];
+
+const spinCategories={
+  katter:["Millan","Bonnie","Bill","Persika","Trolle","Bosse"],
+  farger:["Grå","Beige","Vit","Svart","Orange"],
+};
+
+function drawWheel(){
+  const size=spinCanvas.width;
+  const center=size/2;
+  const radius=size/2-8;
+
+  spinCtx.clearRect(0,0,size,size);
+
+  if(spinWords.length===0){
+    spinCtx.beginPath();
+    spinCtx.arc(center,center,radius,0,Math.PI*2);
+    spinCtx.fillStyle="#f2f2f2";
+    spinCtx.fill();
+    spinCtx.lineWidth=4;
+    spinCtx.strokeStyle="#2f2418";
+    spinCtx.stroke();
+
+    spinCtx.fillStyle="#2f2418";
+    spinCtx.font="bold 22px Arial";
+    spinCtx.textAlign="center";
+    spinCtx.textBaseline="middle";
+    spinCtx.fillText("Lägg till ord",center,center);
+    return;
+  }
+
+  const slice=(Math.PI*2)/spinWords.length;
+
+  for(let i=0;i<spinWords.length;i++){
+    const start=spinAngle+i*slice;
+    const end=start+slice;
+
+    spinCtx.beginPath();
+    spinCtx.moveTo(center,center);
+    spinCtx.arc(center,center,radius,start,end);
+    spinCtx.closePath();
+
+    const wheelColor=spinColors[i%spinColors.length];
+    spinCtx.fillStyle=wheelColor;
+    spinCtx.fill();
+    spinCtx.lineWidth=3;
+    spinCtx.strokeStyle="#2f2418";
+    spinCtx.stroke();
+
+    spinCtx.save();
+    spinCtx.translate(center,center);
+    spinCtx.rotate(start+slice/2);
+
+    spinCtx.fillStyle=(wheelColor==="#111111")?"#fff":"#2f2418";
+    spinCtx.font="bold 16px Arial";
+    spinCtx.textAlign="right";
+    spinCtx.textBaseline="middle";
+
+    let label=spinWords[i];
+    if(label.length>18) label=label.slice(0,17)+"…";
+
+    spinCtx.fillText(label,radius-20,0);
+    spinCtx.restore();
+  }
+
+  spinCtx.beginPath();
+  spinCtx.arc(center,center,28,0,Math.PI*2);
+  spinCtx.fillStyle="#fff";
+  spinCtx.fill();
+  spinCtx.lineWidth=4;
+  spinCtx.strokeStyle="#2f2418";
+  spinCtx.stroke();
+}
+
+function renderSpinItems(){
+  spinItems.innerHTML="";
+
+  spinWords.forEach((word,index)=>{
+    const item=document.createElement("div");
+    item.className="spin-item";
+
+    const span=document.createElement("span");
+    span.textContent=word;
+
+    const remove=document.createElement("button");
+    remove.type="button";
+    remove.textContent="❌";
+    remove.title="Ta bort";
+
+    remove.addEventListener("click",()=>{
+      spinWords.splice(index,1);
+      renderSpinItems();
+      drawWheel();
+
+      spinResult.textContent=spinWords.length>=2
+        ?"Klicka på SPIN!"
+        :"Lägg till minst två ord för att snurra hjulet.";
+    });
+
+    item.appendChild(span);
+    item.appendChild(remove);
+    spinItems.appendChild(item);
+  });
+}
+
+function createConfetti(){
+  spinConfetti.innerHTML="";
+
+  const colors=["#808080","#d8c3a5","#ffffff","#111111","#e87524"];
+
+  for(let i=0;i<45;i++){
+    const piece=document.createElement("span");
+    piece.className="confetti-piece";
+    piece.style.left=(Math.random()*100)+"%";
+    piece.style.background=colors[i%colors.length];
+    piece.style.animationDelay=(Math.random()*0.3)+"s";
+    spinConfetti.appendChild(piece);
+  }
+}
+
+function showWinner(index){
+  currentWinnerIndex=index;
+  spinWinnerName.textContent=spinWords[index];
+  createConfetti();
+  spinWinnerOverlay.style.display="flex";
+  spinResult.textContent=`🎉 Vinnare: ${spinWords[index]}`;
+}
+
+function hideWinner(){
+  spinWinnerOverlay.style.display="none";
+  spinConfetti.innerHTML="";
+  currentWinnerIndex=-1;
+}
+
+spinAdd.addEventListener("click",()=>{
+  const word=spinInput.value.trim();
+  if(!word)return;
+
+  spinWords.push(word);
+  spinInput.value="";
+  renderSpinItems();
+  drawWheel();
+  spinResult.textContent="Klicka på SPIN!";
+});
+
+spinInput.addEventListener("keydown",(event)=>{
+  if(event.key==="Enter")spinAdd.click();
+});
+
+spinCategory.addEventListener("change",()=>{
+  const category=spinCategory.value;
+  if(!category)return;
+
+  spinWords=[...spinCategories[category]];
+  renderSpinItems();
+  drawWheel();
+  spinResult.textContent="Klicka på SPIN!";
+  spinCategory.value="";
+});
+
+spinClear.addEventListener("click",()=>{
+  hideWinner();
+  spinWords=[];
+  renderSpinItems();
+  drawWheel();
+  spinResult.textContent="Lägg till minst två ord för att snurra hjulet.";
+});
+
+spinContinue.addEventListener("click",()=>{
+  hideWinner();
+  spinResult.textContent="Klicka på SPIN för att snurra igen!";
+});
+
+spinRemoveWinner.addEventListener("click",()=>{
+  if(currentWinnerIndex<0)return;
+
+  spinWords.splice(currentWinnerIndex,1);
+  hideWinner();
+  renderSpinItems();
+  drawWheel();
+
+  spinResult.textContent=spinWords.length>=2
+    ?"Vinnaren är borttagen. Klicka på SPIN för att fortsätta!"
+    :"Lägg till minst två ord för att snurra hjulet.";
+});
+
+spinGo.addEventListener("click",()=>{
+  if(spinning)return;
+
+  if(spinWords.length<2){
+    spinResult.textContent="Du behöver minst två ord.";
+    return;
+  }
+
+  hideWinner();
+  spinning=true;
+  spinGo.disabled=true;
+
+  const winnerIndex=Math.floor(Math.random()*spinWords.length);
+  const slice=(Math.PI*2)/spinWords.length;
+
+  const targetAngle=-(winnerIndex*slice+slice/2)-Math.PI/2;
+  const extraTurns=4+(Math.floor(Math.random()*2));
+
+  const startAngle=spinAngle;
+  const finalAngle=targetAngle+extraTurns*Math.PI*2;
+
+  /* Snabbare snurr */
+  const duration=2400;
+  const startTime=performance.now();
+
+  function animate(now){
+    const progress=Math.min((now-startTime)/duration,1);
+    const eased=1-Math.pow(1-progress,3);
+
+    spinAngle=startAngle+(finalAngle-startAngle)*eased;
+    drawWheel();
+
+    if(progress<1){
+      requestAnimationFrame(animate);
+    }else{
+      spinAngle=finalAngle;
+      drawWheel();
+      spinning=false;
+      spinGo.disabled=false;
+      showWinner(winnerIndex);
+    }
+  }
+
+  requestAnimationFrame(animate);
+});
+
+drawWheel();
+
 </script>
 
 </body>

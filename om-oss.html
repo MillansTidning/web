@@ -85,6 +85,27 @@
 
 }
 
+
+/* MT-kalender */
+.calendar-section{margin-top:24px}
+.calendar{max-width:760px;margin:0 auto;padding:20px;border:3px solid #2f2418;border-radius:24px;background:#fff;box-shadow:6px 6px 0 rgba(47,36,24,.12)}
+.calendar-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.calendar-head h2{margin:0;text-align:center;flex:1}
+.calendar-nav{background:linear-gradient(#8ecf8e,#68b968);border:3px solid #2f2418;border-radius:18px;padding:8px 14px;font-size:1.1rem;font-weight:bold;cursor:pointer}
+.calendar-nav:hover{background:#ffe28a}
+.calendar-weekdays,.calendar-days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.calendar-weekdays div{text-align:center;font-weight:bold;padding:8px 2px}
+.calendar-day{min-height:62px;border:2px solid #2f2418;border-radius:12px;background:#fafafa;padding:6px;cursor:pointer;position:relative;font-weight:bold}
+.calendar-day:hover{background:#ffe28a}
+.calendar-day.empty{border-color:transparent;background:transparent;cursor:default}
+.calendar-day.today{outline:3px solid #68b968}
+.calendar-day.has-event{background:#dff2df}
+.calendar-day .event-dot{display:block;width:8px;height:8px;border-radius:50%;background:#2e7d32;margin-top:5px}
+.calendar-event{margin-top:16px;padding:14px;border:2px solid #2f2418;border-radius:18px;background:#f7f7f7;min-height:28px}
+.calendar-event strong{display:block;margin-bottom:5px}
+.calendar-note{margin:14px 0 0;padding:12px 14px;border-radius:16px;background:#fff4c7;border:2px solid #2f2418;text-align:center;font-weight:bold}
+@media(max-width:600px){.calendar{padding:12px}.calendar-day{min-height:48px;padding:4px;font-size:.9rem}.calendar-weekdays{font-size:.85rem}}
+
 </style>
 
 </head>
@@ -220,6 +241,25 @@ Namn: Kristin Sjöö<p>
 
 </div>
 
+
+
+<!-- MT-kalender -->
+<div class="article calendar-section">
+<h2>📅 MT-kalendern</h2>
+<div class="calendar">
+<div class="calendar-head">
+<button class="calendar-nav" id="prevMonth" type="button">⬅️</button>
+<h2 id="calendarMonth"></h2>
+<button class="calendar-nav" id="nextMonth" type="button">➡️</button>
+</div>
+<div class="calendar-weekdays">
+<div>Mån</div><div>Tis</div><div>Ons</div><div>Tor</div><div>Fre</div><div>Lör</div><div>Sön</div>
+</div>
+<div class="calendar-days" id="calendarDays"></div>
+<div class="calendar-event" id="calendarEvent">Klicka på ett datum för att se vad som händer.</div>
+<div class="calendar-note">📢 Kalendern uppdateras på denna månad om den inte har uppdaterats.</div>
+</div>
+</div>
 
 <div
 class="article hidden"
@@ -567,6 +607,77 @@ if(response.ok){
 }
 
 });
+
+
+/* MT-kalender */
+const calendarMonth=document.getElementById("calendarMonth");
+const calendarDays=document.getElementById("calendarDays");
+const calendarEvent=document.getElementById("calendarEvent");
+const prevMonth=document.getElementById("prevMonth");
+const nextMonth=document.getElementById("nextMonth");
+
+/* Lägg till händelser här, till exempel:
+"2026-09-15":"Nästa nummer av MT kommer ut!"
+*/
+const calendarEvents={
+    "2026-09-30":"Nästa nummer av MT kommer ut 🗞️",
+   
+};
+
+const monthNames=["Januari","Februari","Mars","April","Maj","Juni","Juli","Augusti","September","Oktober","November","December"];
+let calendarDate=new Date();
+
+function dateKey(year,month,day){
+return `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+}
+
+function showEvent(key,day){
+calendarEvent.innerHTML=calendarEvents[key]
+? `<strong>📅 ${day} ${monthNames[calendarDate.getMonth()]}</strong>${calendarEvents[key]}`
+: `<strong>📅 ${day} ${monthNames[calendarDate.getMonth()]}</strong>Inget inlagt denna dag.`;
+}
+
+function renderCalendar(){
+const year=calendarDate.getFullYear();
+const month=calendarDate.getMonth();
+calendarMonth.textContent=`${monthNames[month]} ${year}`;
+calendarDays.innerHTML="";
+calendarEvent.textContent="Klicka på ett datum för att se vad som händer.";
+
+let start=new Date(year,month,1).getDay();
+start=start===0?6:start-1;
+const days=new Date(year,month+1,0).getDate();
+
+for(let i=0;i<start;i++){
+const empty=document.createElement("div");
+empty.className="calendar-day empty";
+calendarDays.appendChild(empty);
+}
+
+const today=new Date();
+
+for(let day=1;day<=days;day++){
+const button=document.createElement("button");
+button.type="button";
+button.className="calendar-day";
+button.textContent=day;
+const key=dateKey(year,month,day);
+
+if(day===today.getDate()&&month===today.getMonth()&&year===today.getFullYear())button.classList.add("today");
+if(calendarEvents[key]){
+button.classList.add("has-event");
+const dot=document.createElement("span");
+dot.className="event-dot";
+button.appendChild(dot);
+}
+button.addEventListener("click",()=>showEvent(key,day));
+calendarDays.appendChild(button);
+}
+}
+
+prevMonth.addEventListener("click",()=>{calendarDate.setMonth(calendarDate.getMonth()-1);renderCalendar()});
+nextMonth.addEventListener("click",()=>{calendarDate.setMonth(calendarDate.getMonth()+1);renderCalendar()});
+renderCalendar();
 
 </script>
 
