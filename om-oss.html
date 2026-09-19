@@ -106,6 +106,74 @@
 .calendar-note{margin:14px 0 0;padding:12px 14px;border-radius:16px;background:#fff4c7;border:2px solid #2f2418;text-align:center;font-weight:bold}
 @media(max-width:600px){.calendar{padding:12px}.calendar-day{min-height:48px;padding:4px;font-size:.9rem}.calendar-weekdays{font-size:.85rem}}
 
+
+#millanChatBox{
+  max-width:700px;
+  margin:24px auto;
+  border:3px solid #2f2418;
+  border-radius:24px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:6px 6px 0 rgba(47,36,24,.12);
+}
+.millan-chat-head{
+  background:linear-gradient(#8ecf8e,#68b968);
+  padding:16px 20px;
+  border-bottom:3px solid #2f2418;
+}
+.millan-chat-head h2{margin:0}
+.millan-chat-status{font-size:.9rem}
+#millanMessages{
+  height:380px;
+  overflow-y:auto;
+  padding:18px;
+  background:#fafafa;
+}
+.millan-message{
+  max-width:78%;
+  padding:11px 14px;
+  margin:9px 0;
+  border-radius:18px;
+  line-height:1.4;
+  word-wrap:break-word;
+}
+.millan-bot{
+  background:#fff4c7;
+  border:2px solid #2f2418;
+  margin-right:auto;
+}
+.millan-user{
+  background:#dff2df;
+  border:2px solid #2e7d32;
+  margin-left:auto;
+}
+.millan-chat-input{
+  display:flex;
+  gap:8px;
+  padding:12px;
+  border-top:2px solid #ddd;
+  background:#fff;
+}
+#millanInput{
+  flex:1;
+  min-width:0;
+  padding:12px;
+  border:2px solid #2f2418;
+  border-radius:18px;
+  font:inherit;
+}
+#millanSend{
+  border:3px solid #2f2418;
+  border-radius:18px;
+  padding:10px 16px;
+  background:linear-gradient(#8ecf8e,#68b968);
+  font-weight:bold;
+  cursor:pointer;
+}
+@media(max-width:600px){
+  #millanMessages{height:320px}
+  .millan-message{max-width:85%}
+}
 </style>
 
 </head>
@@ -207,6 +275,8 @@ Namn: Millan Sjöö<p>
 <p>Intresse: Leka<p>
 <p>Djur: Bonnie, Trolle,  Persika, Bosse JR och Bill<p>
 </p>
+
+<button class="contact-btn" type="button" onclick="openMillanChat()">🐱 Kontakta Millan</button>
 </div>
 
 <div class="article">
@@ -242,6 +312,21 @@ Namn: Kristin Sjöö<p>
 </div>
 
 
+
+
+<div class="article hidden" id="millanChatBox">
+  <div class="millan-chat-head">
+    <h2>😸 Millan</h2>
+    <div class="millan-chat-status">🟢 Online</div>
+  </div>
+  <div id="millanMessages">
+    <div class="millan-message millan-bot">Hej! Det är Millan! 😸<br>Vad heter du?</div>
+  </div>
+  <div class="millan-chat-input">
+    <input id="millanInput" type="text" placeholder="Skriv ett meddelande..." autocomplete="off">
+    <button id="millanSend" type="button">➤ Skicka</button>
+  </div>
+</div>
 
 <!-- MT-kalender -->
 <div class="article calendar-section">
@@ -453,6 +538,76 @@ document.addEventListener("click",()=>{
 
     menu.classList.remove("active");
 
+});
+
+function openMillanChat(){
+  const chat=document.getElementById("millanChatBox");
+  chat.classList.remove("hidden");
+  chat.scrollIntoView({behavior:"smooth"});
+  setTimeout(()=>document.getElementById("millanInput").focus(),300);
+}
+
+const millanMessages=document.getElementById("millanMessages");
+const millanInput=document.getElementById("millanInput");
+const millanSend=document.getElementById("millanSend");
+
+function addMillanMessage(text,type){
+  const div=document.createElement("div");
+  div.className="millan-message "+(type==="user"?"millan-user":"millan-bot");
+  div.textContent=text;
+  millanMessages.appendChild(div);
+  millanMessages.scrollTop=millanMessages.scrollHeight;
+}
+
+let millanUserName="";
+
+function millanReply(text){
+  if(!millanUserName){
+    millanUserName=text.trim();
+    return "Hej "+millanUserName+"! 😸 Vad kul att träffa dig! Vad vill du prata om?";
+  }
+
+  const t=text.toLowerCase();
+
+  if(t.includes("hej")||t.includes("hallå"))
+    return "Hej hej! 😸 Hej!";
+  if(t.includes("äta")||t.includes("mat"))
+    return "Jag gillar god kattmat! 😸🍽️";
+  if(t.includes("göra")||t.includes("gillar"))
+    return "Jag gillar att leka, busa och sova. 🐾";
+  if(t.includes("hund"))
+    return "Hundar kan vara snälla, men jag föredrar katter. 😼";
+  if(t.includes("natt")||t.includes("sover"))
+    return "På natten håller jag koll på huset... och sover ibland också. 🌙🐱";
+  if(t.includes("tidning")||t.includes("mt"))
+    return "Millans Tidning är förstås min favorittidning! 📰😸";
+  if(t.includes("kattung")||t.includes("ungar"))
+    return "Mina kattungar heter Bonnie, Trolle, Persika, Bosse och Bill. 🐾";
+ if(t.includes("ok")||t.includes("okej"))
+    return "Ok";
+  if(t.includes("bäst"))
+    return "Självklart är jag bäst! Jag är ju Millan. 😎🐱";
+  if(t.includes("flyga"))
+    return "Inte riktigt... men jag kan hoppa väldigt högt! 🐱💨";
+  if(t.includes("namn")||t.includes("heter du"))
+    return "Jag heter Millan! 😸";
+  if(t.includes("tack"))
+    return "Varsågod! 😸🐾";
+
+  return "Jag fattar inte 😺";
+}
+
+function sendMillanMessage(){
+  const text=millanInput.value.trim();
+  if(!text)return;
+  addMillanMessage(text,"user");
+  millanInput.value="";
+  setTimeout(()=>addMillanMessage(millanReply(text),"bot"),450);
+}
+
+millanSend.addEventListener("click",sendMillanMessage);
+millanInput.addEventListener("keydown",(e)=>{
+  if(e.key==="Enter")sendMillanMessage();
 });
 
 /* ===========================
