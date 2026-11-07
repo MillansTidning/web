@@ -21,10 +21,13 @@ const messaging = firebase.messaging();
 // Ta emot notiser i bakgrunden
 messaging.onBackgroundMessage((payload) => {
 
-  const title = payload.notification?.title || "Millans Tidning";
+  // Visa bara manuella notiser när meddelandet saknar notification-fält.
+  if (payload.notification) return;
+
+  const title = payload.data?.title || "Millans Tidning";
 
   const options = {
-    body: payload.notification?.body || "Något nytt har hänt på MT! 😸",
+    body: payload.data?.body || "Något nytt har hänt på MT! 😸",
     icon: "/web/icon-192.png",
     badge: "/web/icon-192.png",
     data: payload.data || {}
@@ -32,7 +35,6 @@ messaging.onBackgroundMessage((payload) => {
 
   self.registration.showNotification(title, options);
 });
-
 
 // Vad händer när man trycker på notisen?
 self.addEventListener("notificationclick", (event) => {
