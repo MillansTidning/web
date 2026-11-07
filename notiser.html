@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MT Notiscentral</title>
+  <link rel="icon" type="image/png" href="logga.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .notiscentral { max-width: 680px; margin: 30px auto; }
+    .notisruta { background: #fff; border-radius: 12px; padding: 24px; margin: 18px 0; box-shadow: 0 2px 10px rgba(0,0,0,.08); }
+    .notisruta h2 { margin-top: 0; }
+    .notisruta label { display: block; margin: 14px 0 6px; font-weight: bold; }
+    .notisruta input, .notisruta textarea { box-sizing: border-box; width: 100%; padding: 11px; border: 1px solid #bbb; border-radius: 7px; font: inherit; }
+    .notisruta textarea { min-height: 120px; resize: vertical; }
+    .notisruta button { margin-top: 16px; padding: 11px 18px; border: 0; border-radius: 7px; cursor: pointer; font: inherit; }
+    .notisruta button:disabled { opacity: .6; cursor: wait; }
+    #status { min-height: 1.5em; margin-top: 14px; }
+    .sekundar { background: #e8e8e8; color: #222; margin-left: 8px; }
+    .info { color: #555; font-size: .95em; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>🔔 MT Notiscentral</h1>
+  <p>Administrera notiser från Millans Tidning</p>
+</header>
+
+<main class="container notiscentral">
+  <section class="notisruta" id="loginPanel">
+    <h2>Logga in</h2>
+    <p class="info">Endast administratören har behörighet att skicka notiser.</p>
+    <form id="loginForm">
+      <label for="email">E-postadress</label>
+      <input id="email" type="email" autocomplete="username" required>
+      <label for="password">Lösenord</label>
+      <input id="password" type="password" autocomplete="current-password" required>
+      <button type="submit" id="loginButton">Logga in</button>
+    </form>
+    <p id="loginStatus" role="status" aria-live="polite"></p>
+  </section>
+
+  <section class="notisruta" id="sendPanel" hidden>
+    <h2>Skicka en notis</h2>
+    <p id="signedInAs" class="info"></p>
+    <form id="sendForm">
+      <label for="title">Rubrik</label>
+      <input id="title" type="text" maxlength="100" required placeholder="Exempel: Nytt nummer av tidningen!">
+      <label for="message">Meddelande</label>
+      <textarea id="message" maxlength="500" required placeholder="Skriv vad du vill berätta..."></textarea>
+      <p class="info">Rubriken får vara högst 100 tecken och meddelandet högst 500 tecken.</p>
+      <button type="submit" id="sendButton">🔔 Skicka notis</button>
+      <button type="button" class="sekundar" id="logoutButton">Logga ut</button>
+    </form>
+    <p id="status" role="status" aria-live="polite"></p>
+  </section>
+</main>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCztFT4yGoEvDrPmxS4WwZjRqwtcRy_K_A",
+    authDomain: "millans-tidning.firebaseapp.com",
+    projectId: "millans-tidning",
+    storageBucket: "millans-tidning.firebasestorage.app",
+    messagingSenderId: "661191163803",
+    appId: "1:661191163803:web:cc1406ed3ebea95552eb3e",
+    measurementId: "G-ZT86YGNW6C"
+  };
+
+  const ADMIN_UID = "sQzp6dsJFCOjAPd5YII1latJJk13";
+  const WORKER_URL = "https://mt-notiser.tomas-k-moberg.workers.dev/send";
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  const loginPanel = document.getElementById("loginPanel");
+  const sendPanel = document.getElementById("sendPanel");
+  const loginForm = document.getElementById("loginForm");
+  const loginButton = document.getElementById("loginButton");
+  const loginStatus = document.getElementById("loginStatus");
+  const signedInAs = document.getElementById("signedInAs");
+  const sendForm = document.getElementById("sendForm");
+  const sendButton = document.getElementById("sendButton");
+  const status = document.getElementById("status");
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      loginPanel.hidden = false;
+      sendPanel.hidden = true;
+      return;
+    }
+
+    if (user.uid !== ADMIN_UID) {
+      await signOut(auth);
+      loginStatus.textContent = "Det här kontot har inte administratörsbehörighet.";
+      loginPanel.hidden = false;
+      sendPanel.hidden = true;
+      return;
+    }
+
+    loginPanel.hidden = true;
+    sendPanel.hidden = false;
+    signedInAs.textContent = "Inloggad som " + (user.email || "administratör") + ".";
+  });
+
+  loginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    loginButton.disabled = true;
+    loginStatus.textContent = "Loggar in...";
+
+    try {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const credential = await signInWithEmailAndPassword(auth, email, password);
+
+      if (credential.user.uid !== ADMIN_UID) {
+        await signOut(auth);
+        throw new Error("Det här kontot har inte administratörsbehörighet.");
+      }
+
+      loginStatus.textContent = "";
+    } catch (error) {
+      loginStatus.textContent = "Kunde inte logga in: " + error.message;
+    } finally {
+      loginButton.disabled = false;
+    }
+  });
+
+  sendForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const title = document.getElementById("title").value.trim();
+    const body = document.getElementById("message").value.trim();
+
+    if (!title || !body) {
+      status.textContent = "Fyll i både rubrik och meddelande.";
+      return;
+    }
+
+    sendButton.disabled = true;
+    status.textContent = "Skickar notisen...";
+
+    try {
+      const user = auth.currentUser;
+      if (!user || user.uid !== ADMIN_UID) {
+        throw new Error("Du är inte inloggad som administratör.");
+      }
+
+      const idToken = await user.getIdToken();
+      const response = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + idToken,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ title, body })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Utskicket misslyckades.");
+      }
+
+      status.textContent = `Klart! ${result.sent} notis(er) skickades. ${result.failed} misslyckades.`;
+      sendForm.reset();
+    } catch (error) {
+      status.textContent = "Det gick inte att skicka: " + error.message;
+    } finally {
+      sendButton.disabled = false;
+    }
+  });
+
+  document.getElementById("logoutButton").addEventListener("click", async () => {
+    await signOut(auth);
+    status.textContent = "";
+  });
+</script>
+</body>
+</html>
