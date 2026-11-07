@@ -91,6 +91,14 @@
     <p>Här kan du läsa om oss som gör tidningen. Gå hit om du vill kontakta redaktionen.</p>
   </div>
 
+
+  <div class="article" id="mt-notifications">
+    <h2>🔔 Notiser från Millans Tidning</h2>
+    <p>Vill du få en notis när något nytt händer på MT?</p>
+    <button type="button" class="pdf-button cat" id="enableNotifications">🔔 Aktivera notiser</button>
+    <p id="notificationStatus" aria-live="polite"></p>
+  </div>
+
 </div>
 
 <footer> 
@@ -124,5 +132,67 @@ if ("serviceWorker" in navigator) {
 }
 </script>
  
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+  import { getMessaging, getToken, isSupported } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-messaging.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCztFT4yGoEvDrPmxS4WwZjRqwtcRy_K_A",
+    authDomain: "millans-tidning.firebaseapp.com",
+    projectId: "millans-tidning",
+    storageBucket: "millans-tidning.firebasestorage.app",
+    messagingSenderId: "661191163803",
+    appId: "1:661191163803:web:cc1406ed3ebea95552eb3e",
+    measurementId: "G-ZT86YGNW6C"
+  };
+
+  const button = document.getElementById("enableNotifications");
+  const status = document.getElementById("notificationStatus");
+
+  button.addEventListener("click", async () => {
+    button.disabled = true;
+    status.textContent = "Aktiverar notiser...";
+    try {
+      if (!("serviceWorker" in navigator) || !("Notification" in window)) {
+        throw new Error("Den här webbläsaren stöder inte webbnotiser.");
+      }
+      if (!(await isSupported())) {
+        throw new Error("Webbnotiser stöds inte i den här webbläsaren.");
+      }
+      const permission = await Notification.requestPermission();
+      if (permission !== "granted") {
+        status.textContent = "Du tillät inte notiser. Du kan ändra detta i webbläsarens inställningar.";
+        button.disabled = false;
+        return;
+      }
+
+      const registration = await navigator.serviceWorker.register("/web/service-worker.js");
+      const app = initializeApp(firebaseConfig);
+      const messaging = getMessaging(app);
+      const token = await getToken(messaging, {
+        vapidKey: "BIIsieMdfxBIKQ0VgqDg2tVPtv6hnrqn_DbNQMf5KGMSkrr3LZwnrO2L7yrdsLzo4ia6nbpwVwNdyKaTGL-VwLc",
+        serviceWorkerRegistration: registration
+      });
+      if (!token) throw new Error("Firebase kunde inte skapa en notisprenumeration.");
+
+      const db = getFirestore(app);
+      await addDoc(collection(db, "notificationSubscribers"), {
+        token,
+        createdAt: serverTimestamp(),
+        userAgent: navigator.userAgent
+      });
+
+      status.textContent = "Klart! Du får nu notiser från Millans Tidning. 😸";
+      button.textContent = "✅ Notiser aktiverade";
+    } catch (error) {
+      console.error("Fel vid aktivering av notiser:", error);
+      status.textContent = "Det gick inte att aktivera notiser: " + (error.message || error);
+      button.disabled = false;
+    }
+  });
+</script>
+
 </body> 
 </html>
